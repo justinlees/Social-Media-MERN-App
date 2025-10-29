@@ -16,7 +16,9 @@ export default function UserHome() {
                 </Link>
               </li>
               <li>
-                <Link>AI</Link>
+                <Link>
+                  <span class="material-symbols-outlined">wand_stars</span>
+                </Link>
               </li>
               <li>
                 <Link>
@@ -31,7 +33,7 @@ export default function UserHome() {
                 </Link>
               </li>
               <li>
-                <Link>
+                <Link to={`userSettings`}>
                   <span className="material-symbols-outlined">settings</span>
                 </Link>
               </li>
@@ -39,7 +41,7 @@ export default function UserHome() {
           </nav>
         </div>
 
-        <div className="allPosts">
+        <div className="outletLayout">
           <Outlet />
         </div>
       </div>

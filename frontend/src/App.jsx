@@ -6,6 +6,7 @@ import SignIn from "./pages/SignIn";
 import UserHome from "./pages/UserHome";
 import UserProfile from "./Components/UserProfile";
 import AllPosts from "./Components/AllPosts";
+import UserSettings from "./Components/UserSettings";
 function App() {
   return (
     <>
@@ -17,6 +18,7 @@ function App() {
           <Route path="/:userId/homePage" element={<UserHome />}>
             <Route index="true" element={<AllPosts />} />
             <Route path="userProfile" element={<UserProfile />} />
+            <Route path="userSettings" element={<UserSettings />} />
           </Route>
         </Routes>
       </BrowserRouter>
