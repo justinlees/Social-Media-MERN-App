@@ -2,20 +2,41 @@ export default function UserProfile() {
   return (
     <div className="userProfilePage">
       <header className="profileHeader">
-        <div className="userImage">
-          <img />
+        <div className="userInfo">
+          <div className="userImage">
+            <img />
+          </div>
+          <div className="userDetails">
+            <div className="userName">
+              <h1>
+                UserName <span>*</span>
+              </h1>
+              <h2>Diana Ankudinova Alajendra</h2>
+            </div>
+            <ul>
+              <li>
+                <span>234</span>
+                Followers
+              </li>
+              <li>
+                <span>437</span>
+                Following
+              </li>
+            </ul>
+          </div>
         </div>
-        <div className="userDetails">
-          <h1>UserName</h1>
-          <h2>Full Name</h2>
-          <ul>
-            <li>Followers</li>
-            <li>Following</li>
-          </ul>
-          <button>Create Post</button>
-          <button>Message</button>
-        </div>
+        <section className="buttonsArea">
+          <div className="dummy"></div>
+          <div>
+            <div className="buttons">
+              <button className="positiveBtn">Create Post</button>
+              <button>Message</button>
+            </div>
+            <div className="dummy2"></div>
+          </div>
+        </section>
       </header>
+
       <div>
         <h1>No posts.Click Create Post</h1>
       </div>
