@@ -1,4 +1,8 @@
+import { useState, useEffect } from "react";
+import PostCreation from "./PostCreation.jsx";
+
 export default function UserProfile() {
+  const [openPost, setOpenPost] = useState(false);
   return (
     <div className="userProfilePage">
       <header className="profileHeader">
@@ -29,7 +33,14 @@ export default function UserProfile() {
           <div className="dummy"></div>
           <div>
             <div className="buttons">
-              <button className="positiveBtn">Create Post</button>
+              <button
+                className="positiveBtn"
+                onClick={() => {
+                  setOpenPost(true);
+                }}
+              >
+                Create Post
+              </button>
               <button>Message</button>
             </div>
             <div className="dummy2"></div>
@@ -40,6 +51,7 @@ export default function UserProfile() {
       <div>
         <h1>No posts.Click Create Post</h1>
       </div>
+      {openPost && <PostCreation setOpenPost={setOpenPost} />}
     </div>
   );
 }

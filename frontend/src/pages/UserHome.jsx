@@ -17,7 +17,7 @@ export default function UserHome() {
               </li>
               <li>
                 <Link>
-                  <span class="material-symbols-outlined">wand_stars</span>
+                  <span className="material-symbols-outlined">wand_stars</span>
                 </Link>
               </li>
               <li>
