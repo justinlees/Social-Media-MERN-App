@@ -11,7 +11,7 @@ export default function Post({ posts }) {
             <span>::</span>
           </div>
           <div className="cardPost">
-            <img src="https://images.hindustantimes.com/rf/image_size_960x540/HT/p2/2018/05/07/Pictures/fbl-esp-liga-barcelona-real-madrid_e11c3a40-51c4-11e8-aa60-d0af28d4422a.jpg" />
+            <img src="https://static.skillshare.com/uploads/discussion/tmp/cbe48544.jpg" />
           </div>
           <div className="postCaption">
             <div className="cardReview">
