@@ -15,14 +15,16 @@ export default function AllPosts() {
         <div className="postCaption">
           <div className="cardReview">
             <p>
-              <span class="material-symbols-outlined">sentiment_satisfied</span>
+              <span className="material-symbols-outlined">
+                sentiment_satisfied
+              </span>
               1,578
             </p>
             <p>
-              <span class="material-symbols-outlined">mode_comment</span>325
+              <span className="material-symbols-outlined">mode_comment</span>325
             </p>
             <p>
-              <span class="material-symbols-outlined">send</span>
+              <span className="material-symbols-outlined">send</span>
             </p>
           </div>
           <p className="caption">

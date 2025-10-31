@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import PostCreation from "./PostCreation.jsx";
 
 export default function UserProfile() {
   const [openPost, setOpenPost] = useState(false);
+  const userData = useOutletContext();
   return (
     <div className="userProfilePage">
       <header className="profileHeader">
@@ -13,7 +15,7 @@ export default function UserProfile() {
           <div className="userDetails">
             <div className="userName">
               <h1>
-                UserName <span>*</span>
+                {userData?.userName} <span>*</span>
               </h1>
               <h2>Diana Ankudinova Alajendra</h2>
             </div>

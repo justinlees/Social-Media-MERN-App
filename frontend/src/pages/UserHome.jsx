@@ -1,6 +1,29 @@
-import { Link, Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, Outlet, useParams } from "react-router-dom";
 
 export default function UserHome() {
+  const [userData, setUserData] = useState();
+  const params = useParams();
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const response = await fetch(
+          `http://localhost:5000/${params.userId}/homePage`
+        );
+        if (response.status === 200) {
+          const data = await response.json();
+          console.log(data.user);
+          console.log(params.userId);
+          setUserData(data.user);
+        } else {
+          console.log("No User Details");
+        }
+      };
+      fetchData();
+    } catch (error) {
+      consol.error("Error Occured", error);
+    }
+  }, [params.userID]);
   return (
     <div className="userHomePage">
       <header className="titleHeader">
@@ -42,7 +65,7 @@ export default function UserHome() {
         </div>
 
         <div className="outletLayout">
-          <Outlet />
+          <Outlet context={userData} />
         </div>
       </div>
     </div>
