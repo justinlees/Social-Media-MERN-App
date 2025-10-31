@@ -2,16 +2,20 @@ const User = require("../models/user.model.js");
 const Post = require("../models/post.model.js");
 
 const getUserDetails = async (req, res) => {
+  console.log("Entered API");
   const { userId } = req.params;
   try {
-    const user = await User.findOne({ userId }).select("-password");
+    console.log("Entered try");
+    const user = await User.findOne({ _id: userId }).select("-password");
+    console.log("User fetched");
     if (user) {
-      res.status(200).json({ user });
+      console.log("User Found");
+      return res.status(200).json({ user });
     }
-    res.status(404).json({ message: "User Not Found" });
+    return res.status(404).json({ message: "User Not Found" });
   } catch (error) {
-    res.status(500).json({ message: "server Error" });
     console.log("Error occured", error);
+    return res.status(500).json({ message: "server Error" });
   }
 };
 
