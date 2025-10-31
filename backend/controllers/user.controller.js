@@ -23,11 +23,33 @@ const getUserPosts = async (req, res) => {
   const { userId } = req.params;
   try {
     const posts = await Post.find({ userId });
-    res.status(200).json({ posts });
+    return res.status(200).json({ posts });
   } catch (error) {
     console.log("Error Occured", error);
-    res.status(500).json({ message: "Server Error Occured" });
+    return res.status(500).json({ message: "Server Error Occured" });
   }
 };
 
-module.exports = { getUserDetails, getUserPosts };
+const userPostCreation = async (req, res) => {
+  const { userId } = req.params;
+  const { postImage, postCaption, userName } = req.body;
+  console.log("post");
+  console.log(userId);
+  try {
+    const createPost = await Post.create({
+      userId,
+      postImage,
+      postCaption,
+      userName,
+    });
+    if (createPost) {
+      return res.status(201).json({ message: "postCreated" });
+    }
+    return res.status(404).json({ message: "Error in post creation" });
+  } catch (error) {
+    console.log("Server Error", error);
+    return res.status(500).json({ message: "server Error" });
+  }
+};
+
+module.exports = { getUserDetails, getUserPosts, userPostCreation };
