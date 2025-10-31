@@ -2,14 +2,11 @@ const User = require("../models/user.model.js");
 const Post = require("../models/post.model.js");
 
 const getUserDetails = async (req, res) => {
-  console.log("Entered API");
   const { userId } = req.params;
   try {
-    console.log("Entered try");
     const user = await User.findOne({ _id: userId }).select("-password");
-    console.log("User fetched");
+
     if (user) {
-      console.log("User Found");
       return res.status(200).json({ user });
     }
     return res.status(404).json({ message: "User Not Found" });
@@ -33,8 +30,6 @@ const getUserPosts = async (req, res) => {
 const userPostCreation = async (req, res) => {
   const { userId } = req.params;
   const { postImage, postCaption, userName } = req.body;
-  console.log("post");
-  console.log(userId);
   try {
     const createPost = await Post.create({
       userId,
