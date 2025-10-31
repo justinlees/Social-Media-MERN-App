@@ -1,10 +1,33 @@
 import { useState, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import PostCreation from "./PostCreation.jsx";
+import Post from "./Post.jsx";
 
 export default function UserProfile() {
   const [openPost, setOpenPost] = useState(false);
-  const userData = useOutletContext();
+  const [userPosts, setUserPosts] = useState([]);
+  const user = useOutletContext();
+  const params = useParams();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/${params.userId}/homePage/userProfile`
+        );
+
+        if (response.status === 200) {
+          const data = await response.json();
+          setUserPosts(data.posts);
+          console.log(data.posts);
+        } else if (response.status === 404) {
+          setUserPosts(null);
+        }
+      } catch (error) {
+        console.log("Server Error");
+      }
+    };
+    fetchData();
+  }, [params.userId]);
   return (
     <div className="userProfilePage">
       <header className="profileHeader">
@@ -15,9 +38,9 @@ export default function UserProfile() {
           <div className="userDetails">
             <div className="userName">
               <h1>
-                {userData?.userName} <span>*</span>
+                {user?.userName} <span>*</span>
               </h1>
-              <h2>Diana Ankudinova Alajendra</h2>
+              <h2>{user?.fullName}</h2>
             </div>
             <ul>
               <li>
@@ -49,11 +72,17 @@ export default function UserProfile() {
           </div>
         </section>
       </header>
-
-      <div>
-        <h1>No posts.Click Create Post</h1>
+      <div className="allPosts">
+        {userPosts.length ? (
+          <Post posts={userPosts} />
+        ) : (
+          <h1>No posts.Click Create Post</h1>
+        )}
       </div>
-      {openPost && <PostCreation setOpenPost={setOpenPost} />}
+
+      {openPost && (
+        <PostCreation setOpenPost={setOpenPost} postUserName={user?.userName} />
+      )}
     </div>
   );
 }

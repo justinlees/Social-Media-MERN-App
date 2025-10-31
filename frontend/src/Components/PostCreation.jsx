@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-export default function PostCreation({ setOpenPost }) {
+export default function PostCreation({ setOpenPost, postUserName }) {
+  const params = useParams();
   const handleSubmit = async (e) => {
-    const params = useParams();
+    e.preventDefault();
     const formData = {
       userId: params.userId,
+      userName: postUserName,
       postImage: e.target.postImage.value,
       postCaption: e.target.postCaption.value,
     };
     try {
       const response = await fetch(
-        `${process.env.BASE_URL}/${params.userId}/homePage/userProfile/postCreation`,
+        `http://localhost:5000/${params.userId}/homePage/userProfile/postCreation`,
         {
           method: "POST",
           headers: {
@@ -45,7 +47,7 @@ export default function PostCreation({ setOpenPost }) {
           <div className="imageSelection">
             <label className="positiveBtn">
               Add Image
-              <span class="material-symbols-outlined">upload</span>
+              <span className="material-symbols-outlined">upload</span>
               <input type="file" name="postImage" required />
             </label>
           </div>

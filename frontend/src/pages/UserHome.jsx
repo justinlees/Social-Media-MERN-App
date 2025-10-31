@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 
 export default function UserHome() {
-  const [userData, setUserData] = useState();
+  const [user, setUser] = useState();
   const params = useParams();
   useEffect(() => {
     try {
@@ -10,11 +10,10 @@ export default function UserHome() {
         const response = await fetch(
           `http://localhost:5000/${params.userId}/homePage`
         );
+        const data = await response.json();
         if (response.status === 200) {
-          const data = await response.json();
           console.log(data.user);
-          console.log(params.userId);
-          setUserData(data.user);
+          setUser(data.user);
         } else {
           console.log("No User Details");
         }
@@ -65,7 +64,7 @@ export default function UserHome() {
         </div>
 
         <div className="outletLayout">
-          <Outlet context={userData} />
+          <Outlet context={user} />
         </div>
       </div>
     </div>
