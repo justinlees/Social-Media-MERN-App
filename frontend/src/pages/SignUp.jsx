@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Entered handle submit");
     const formData = {
       fullName: e.target.fullName.value,
       userName: e.target.userName.value,
@@ -14,7 +13,6 @@ export default function SignUp() {
       password: e.target.password.value,
     };
     try {
-      console.log("Entered Try");
       const response = await fetch(`http://localhost:5000/account/signUp`, {
         method: "POST",
         headers: {
@@ -22,7 +20,6 @@ export default function SignUp() {
         },
         body: JSON.stringify(formData),
       });
-      console.log("Completed Fetch");
 
       if (response.status === 201) {
         const data = await response.json();

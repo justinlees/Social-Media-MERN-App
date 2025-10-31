@@ -12,7 +12,6 @@ export default function UserHome() {
         );
         const data = await response.json();
         if (response.status === 200) {
-          console.log(data.user);
           setUser(data.user);
         } else {
           console.log("No User Details");

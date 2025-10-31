@@ -18,7 +18,6 @@ export default function UserProfile() {
         if (response.status === 200) {
           const data = await response.json();
           setUserPosts(data.posts);
-          console.log(data.posts);
         } else if (response.status === 404) {
           setUserPosts(null);
         }
