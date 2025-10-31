@@ -47,4 +47,35 @@ const userPostCreation = async (req, res) => {
   }
 };
 
-module.exports = { getUserDetails, getUserPosts, userPostCreation };
+const incrementPostLike = async (req, res) => {
+  const { _id, likedBy } = req.body;
+  try {
+    const incrementLike = await Post.findOneAndUpdate(
+      { _id },
+      { $inc: { likes: 1 } }
+    );
+    if (incrementLike) {
+      return res.status(200).json({ message: "Liked the post" });
+    }
+    return res.status(404).json({ message: "Not liked the post" });
+  } catch (error) {
+    console.error("Server Error", error);
+  }
+};
+
+const getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find();
+    return res.status(200).json({ posts });
+  } catch (error) {
+    console.error("Server Error", error);
+  }
+};
+
+module.exports = {
+  getUserDetails,
+  getUserPosts,
+  userPostCreation,
+  incrementPostLike,
+  getAllPosts,
+};
