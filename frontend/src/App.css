@@ -63,6 +63,20 @@
   height: 4rem;
 }
 
+.sideNav ul li a {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 50%;
+}
+
+.sideNav ul li a:hover {
+  background-color: #acc7ed;
+}
+
 .outletLayout {
   width: 100%;
   height: 100%;

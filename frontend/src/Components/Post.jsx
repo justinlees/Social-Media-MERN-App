@@ -1,4 +1,12 @@
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import SelfPostOptions from "./SelfPostOptions";
+import OthersPostOptions from "./OthersPostOptions";
+
 export default function Post({ posts }) {
+  const [selfUser, setSelfUser] = useState(false);
+  const [otherUser, setOtherUser] = useState(false);
+  const params = useParams();
   return (
     <>
       {posts?.map((post) => (
@@ -8,7 +16,16 @@ export default function Post({ posts }) {
               <img />
               <p>{post?.userName}</p>
             </div>
-            <span>::</span>
+            <span
+              onClick={() => {
+                if (post?.userId === params.userId) setSelfUser(true);
+                else setOtherUser(true);
+              }}
+            >
+              ::
+            </span>
+            {selfUser && <SelfPostOptions />}
+            {otherUser && <OthersPostOptions />}
           </div>
           <div className="cardPost">
             <img src="https://static.skillshare.com/uploads/discussion/tmp/cbe48544.jpg" />
