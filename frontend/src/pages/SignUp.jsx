@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function SignUp() {
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = {
       fullName: e.target.fullName.value,
       userName: e.target.userName.value,
@@ -20,7 +22,7 @@ export default function SignUp() {
         },
         body: JSON.stringify(formData),
       });
-
+      setLoading(false);
       if (response.status === 201) {
         const data = await response.json();
         window.location = `/${data.user._id}/homePage`;
@@ -33,39 +35,57 @@ export default function SignUp() {
   };
 
   return (
-    <div className="signUpPage">
+    <div className="account">
       <form method="POST" onSubmit={handleSubmit}>
+        <h2>SignUp</h2>
         <fieldset>
-          <label>Enter Full Name</label>
-          <input type="text" name="fullName" required />
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Enter Fullname"
+            required
+          />
         </fieldset>
         <fieldset>
-          <label>Enter UserName</label>
-          <input type="text" name="userName" required />
+          <input
+            type="text"
+            name="userName"
+            placeholder="Enter UserName"
+            required
+          />
         </fieldset>
         <fieldset>
-          <label>Enter DOB</label>
           <input type="date" name="dob" required />
         </fieldset>
         <fieldset>
-          <label>Enter Mobile</label>
-          <input type="text" name="mobile" required />
+          <input
+            type="text"
+            name="mobile"
+            placeholder="Enter Mobile"
+            required
+          />
         </fieldset>
         <fieldset>
-          <label>Enter Email</label>
-          <input type="email" name="email" required />
+          <input type="email" name="email" placeholder="Enter Email" required />
         </fieldset>
         <fieldset>
-          <label>Enter Password</label>
-          <input type="password" minLength="8" name="password" required />
+          <input
+            type="password"
+            minLength="8"
+            name="password"
+            placeholder="Enter Password"
+            required
+          />
         </fieldset>
-        <button className="positiveBtn" type="submit">
-          Create Account
-        </button>
+        <fieldset>
+          <button className="positiveBtn" type="submit">
+            {loading ? <span className="loader"></span> : "Create Account"}
+          </button>
+        </fieldset>
+        <fieldset>
+          <Link>SignIn with Google</Link>
+        </fieldset>
       </form>
-      <section>
-        <Link>SignIn with Google</Link>
-      </section>
     </div>
   );
 }
