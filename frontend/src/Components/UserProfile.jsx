@@ -71,7 +71,7 @@ export default function UserProfile() {
           </div>
         </section>
       </header>
-      <div className="allPosts">
+      <div className="userPosts">
         {userPosts.length ? (
           <Post posts={userPosts} />
         ) : (
