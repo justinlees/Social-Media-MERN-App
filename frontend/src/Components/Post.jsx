@@ -24,8 +24,8 @@ export default function Post({ posts }) {
             >
               ::
             </span>
-            {selfUser && <SelfPostOptions />}
-            {otherUser && <OthersPostOptions />}
+            {selfUser && <SelfPostOptions postId={post?._id} />}
+            {otherUser && <OthersPostOptions postId={post?._id} />}
           </div>
           <div className="cardPost">
             <img src="https://static.skillshare.com/uploads/discussion/tmp/cbe48544.jpg" />

@@ -1,8 +1,33 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-export default function SelfPostOptions() {
+export default function SelfPostOptions({ postId }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const params = useParams();
+  const handleDelete = async () => {
+    const deleteData = {
+      _id: postId,
+    };
+    try {
+      const response = await fetch(
+        `http://localhost:5000/${params.userId}/homePage/userProfile/postDeletion`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(deleteData),
+        }
+      );
+
+      if (response.status === 200) {
+        window.location.reload();
+      } else if (response.status === 404) {
+        alert("Unable to Delete the Post");
+      }
+    } catch (error) {
+      console.error("API Error");
+      alert("Error in API");
+    }
+  };
   return (
     <div className="postOptionsPopUp">
       <ul>
@@ -17,7 +42,14 @@ export default function SelfPostOptions() {
       </ul>
       {confirmDelete && (
         <div>
-          <button>Delete</button>
+          <button
+            className="deleteBtn"
+            onClick={() => {
+              handleDelete();
+            }}
+          >
+            Delete
+          </button>
           <button
             onClick={() => {
               setConfirmDelete(false);
