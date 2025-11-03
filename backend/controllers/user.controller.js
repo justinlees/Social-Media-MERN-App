@@ -72,10 +72,23 @@ const getAllPosts = async (req, res) => {
   }
 };
 
+const postDeletion = async (req, res) => {
+  const { _id } = req.body;
+  try {
+    const deletePost = await Post.findOneAndDelete({ _id });
+    if (deletePost) return res.status(200).json({ message: "Post Deleted" });
+    return res.status(404).json({ message: "Post doesn't exist" });
+  } catch (error) {
+    console.error("Server Error:", error);
+    return res.status(500).json("Server Error:", error);
+  }
+};
+
 module.exports = {
   getUserDetails,
   getUserPosts,
   userPostCreation,
   incrementPostLike,
   getAllPosts,
+  postDeletion,
 };
