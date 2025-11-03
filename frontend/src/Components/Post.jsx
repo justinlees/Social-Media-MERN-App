@@ -24,7 +24,9 @@ export default function Post({ posts }) {
             >
               ::
             </span>
-            {selfUser && <SelfPostOptions postId={post?._id} />}
+            {selfUser && (
+              <SelfPostOptions postId={post?._id} setSelfUser={setSelfUser} />
+            )}
             {otherUser && <OthersPostOptions postId={post?._id} />}
           </div>
           <div className="cardPost">

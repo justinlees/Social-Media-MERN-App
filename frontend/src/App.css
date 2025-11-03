@@ -199,6 +199,7 @@
   align-items: center;
   padding: 0.3rem;
   font-weight: bold;
+  position: relative;
 }
 
 .card .cardHeader .cardUser {
@@ -213,6 +214,10 @@
   height: 2rem;
   border: 1px solid black;
   border-radius: 50%;
+}
+
+.card .cardHeader span {
+  cursor: pointer;
 }
 
 .card .cardPost {
@@ -263,6 +268,110 @@
   font-weight: 400;
   font-size: xx-large;
   cursor: pointer;
+}
+
+.postOptionsPopUp {
+  width: 15rem;
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: #fefefe;
+  top: 0rem;
+  right: -18rem;
+  position: absolute;
+  box-shadow: 1px 1px 4px gray;
+  border-radius: 8px;
+}
+
+.postOptionsPopUp .closeBtn {
+  width: fit-content;
+  height: auto;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+}
+
+.postOptionsPopUp .closeBtn span:hover {
+  color: crimson;
+  /* cursor: pointer; */
+  background-color: #dedede;
+  border-radius: 50%;
+}
+
+.postOptionsPopUp ul {
+  list-style-type: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  row-gap: 10px;
+  justify-content: center;
+  flex-direction: column;
+}
+.postOptionsPopUp ul li {
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.postOptionsPopUp ul li:hover {
+  background-color: #f4f4f4;
+}
+
+.postOptionsPopUp .confirmPopUp {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.139);
+  backdrop-filter: blur(10px);
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 8px;
+  row-gap: 1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.postOptionsPopUp .confirmPopUp .buttonArea {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.postOptionsPopUp .confirmPopUp .buttonArea button {
+  padding: 0.5rem;
+  width: 5rem;
+  border: none;
+  background-color: transparent;
+  border: 1px solid gray;
+  border-radius: 4px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.postOptionsPopUp .confirmPopUp .buttonArea button:hover {
+  background-color: black;
+  color: #dedede;
+}
+
+.postOptionsPopUp .confirmPopUp .buttonArea .deleteBtn {
+  color: crimson;
+}
+
+.postOptionsPopUp .confirmPopUp .buttonArea .deleteBtn:hover {
+  background-color: crimson;
+  color: white;
 }
 
 /* UserProfile */
