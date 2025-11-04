@@ -27,7 +27,12 @@ export default function Post({ posts }) {
             {selfUser && (
               <SelfPostOptions postId={post?._id} setSelfUser={setSelfUser} />
             )}
-            {otherUser && <OthersPostOptions postId={post?._id} />}
+            {otherUser && (
+              <OthersPostOptions
+                postId={post?._id}
+                setOtherUser={setOtherUser}
+              />
+            )}
           </div>
           <div className="cardPost">
             <img src="https://static.skillshare.com/uploads/discussion/tmp/cbe48544.jpg" />
