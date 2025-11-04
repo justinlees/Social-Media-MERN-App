@@ -1,6 +1,7 @@
 const User = require("../models/user.model.js");
 const Post = require("../models/post.model.js");
 
+// GET USER DETAILS
 const getUserDetails = async (req, res) => {
   const { userId } = req.params;
   try {
@@ -16,6 +17,7 @@ const getUserDetails = async (req, res) => {
   }
 };
 
+// GET USER POSTS
 const getUserPosts = async (req, res) => {
   const { userId } = req.params;
   try {
@@ -27,6 +29,7 @@ const getUserPosts = async (req, res) => {
   }
 };
 
+// CREATING USER'S POST
 const userPostCreation = async (req, res) => {
   const { userId } = req.params;
   const { postImage, postCaption, userName } = req.body;
@@ -47,22 +50,39 @@ const userPostCreation = async (req, res) => {
   }
 };
 
+// LIKING A POST
 const incrementPostLike = async (req, res) => {
-  const { _id, likedBy } = req.body;
+  const { _id, userId } = req.body;
   try {
-    const incrementLike = await Post.findOneAndUpdate(
-      { _id },
-      { $inc: { likes: 1 } }
-    );
-    if (incrementLike) {
-      return res.status(200).json({ message: "Liked the post" });
+    const alreadyLiked = await Post.findOne({
+      _id,
+    });
+
+    if (!alreadyLiked.likedBy.find(() => userId)) {
+      const incrementLike = await Post.findOneAndUpdate(
+        { _id },
+        { $inc: { likes: 1 }, $push: { likedBy: userId } }
+      );
+      if (incrementLike) {
+        return res.status(200).json({ message: "Liked the post" });
+      }
+      return res.status(404).json({ message: "Not liked the post" });
+    } else {
+      const decrementLike = await Post.findOneAndUpdate(
+        { _id },
+        { $inc: { likes: -1 }, $pull: { likedBy: userId } }
+      );
+      if (decrementLike) {
+        return res.status(200).json({ message: "de-Liked the post" });
+      }
+      return res.status(404).json({ message: "Not de-Liked the post" });
     }
-    return res.status(404).json({ message: "Not liked the post" });
   } catch (error) {
     console.error("Server Error", error);
   }
 };
 
+// GET ALL EXISTING POSTS
 const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find();
@@ -72,6 +92,7 @@ const getAllPosts = async (req, res) => {
   }
 };
 
+// DELETE USER'S POST
 const postDeletion = async (req, res) => {
   const { _id } = req.body;
   try {
