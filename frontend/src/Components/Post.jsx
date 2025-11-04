@@ -6,7 +6,34 @@ import OthersPostOptions from "./OthersPostOptions";
 export default function Post({ posts }) {
   const [selfUser, setSelfUser] = useState(false);
   const [otherUser, setOtherUser] = useState(false);
+  const [isValidLike, setIsValidLike] = useState(false);
   const params = useParams();
+
+  const handleSubmit = async (postId) => {
+    const formData = {
+      _id: postId,
+      userId: params.userId,
+    };
+    try {
+      const response = await fetch(
+        `http://localhost:5000/${params.userId}/homePage/userProfile/likePost`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.status === 200) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Server Error", error);
+    }
+  };
+
   return (
     <>
       {posts?.map((post) => (
@@ -40,7 +67,14 @@ export default function Post({ posts }) {
           <div className="postCaption">
             <div className="cardReview">
               <p>
-                <span className="material-symbols-outlined">
+                <span
+                  className="material-symbols-outlined"
+                  onClick={() => {
+                    if (post?.userId !== params.userId) {
+                      handleSubmit(post?._id);
+                    }
+                  }}
+                >
                   sentiment_satisfied
                 </span>
                 {post?.likes}
