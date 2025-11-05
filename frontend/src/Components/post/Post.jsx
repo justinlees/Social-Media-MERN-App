@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import SelfPostOptions from "../SelfPostOptions";
-import OthersPostOptions from "../OthersPostOptions";
+import SelfPostOptions from "./SelfPostOptions";
+import OthersPostOptions from "./OthersPostOptions";
 
 export default function Post({ posts }) {
   const [selfUser, setSelfUser] = useState(false);
