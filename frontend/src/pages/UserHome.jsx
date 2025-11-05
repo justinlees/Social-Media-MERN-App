@@ -14,7 +14,7 @@ export default function UserHome() {
         if (response.status === 200) {
           setUser(data.user);
         } else {
-          console.log("No User Details");
+          window.location.href = "/";
         }
       };
       fetchData();
