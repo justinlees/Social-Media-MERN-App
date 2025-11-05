@@ -7,6 +7,8 @@ import UserHome from "./pages/UserHome";
 import UserProfile from "./Components/UserProfile";
 import AllPosts from "./Components/AllPosts";
 import UserSettings from "./Components/UserSettings";
+import SettingsOptions from "./Components/settings/SettingsOptions";
+import AccountDeletion from "./Components/settings/AccountDeletion";
 function App() {
   return (
     <>
@@ -18,7 +20,10 @@ function App() {
           <Route path="/:userId/homePage" element={<UserHome />}>
             <Route index="true" element={<AllPosts />} />
             <Route path="userProfile" element={<UserProfile />} />
-            <Route path="userSettings" element={<UserSettings />} />
+            <Route path="userSettings" element={<UserSettings />}>
+              <Route index="true" element={<SettingsOptions />} />
+              <Route path="accountDeletion" element={<AccountDeletion />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
