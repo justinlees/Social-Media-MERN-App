@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Post from "./Post";
+import Post from "./post/Post";
 
 export default function AllPosts({ posts }) {
   const params = useParams();
