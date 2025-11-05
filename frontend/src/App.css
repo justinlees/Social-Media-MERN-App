@@ -282,6 +282,7 @@
   position: absolute;
   box-shadow: 1px 1px 4px gray;
   border-radius: 8px;
+  z-index: 1;
 }
 
 .postOptionsPopUp .closeBtn {
