@@ -105,6 +105,25 @@ const postDeletion = async (req, res) => {
   }
 };
 
+// DELETE USER ACCOUNT
+
+const userAccountDeletion = async (req, res) => {
+  const { _id } = req.body;
+  try {
+    const deleteUser = await User.findOneAndDelete({ _id });
+    if (deleteUser) {
+      const deleteUserPosts = await Post.findOneAndDelete({ userId: _id });
+      if (deleteUserPosts) {
+        return res.status(200).json({ message: "UserDeleted" });
+      }
+    }
+    return res.status(404);
+  } catch (error) {
+    console.error("Error: ", error);
+    return res.status(500).json({ message: "Server Error", error });
+  }
+};
+
 module.exports = {
   getUserDetails,
   getUserPosts,
@@ -112,4 +131,5 @@ module.exports = {
   incrementPostLike,
   getAllPosts,
   postDeletion,
+  userAccountDeletion,
 };
