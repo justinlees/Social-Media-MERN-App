@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import PostCreation from "./PostCreation.jsx";
-import Post from "./Post.jsx";
+import Post from "./post/Post.jsx";
 
 export default function UserProfile() {
   const [openPost, setOpenPost] = useState(false);
@@ -20,6 +20,8 @@ export default function UserProfile() {
           setUserPosts(data.posts);
         } else if (response.status === 404) {
           setUserPosts(null);
+        } else if (response.status === 500) {
+          alert("Server error");
         }
       } catch (error) {
         console.log("Server Error");
