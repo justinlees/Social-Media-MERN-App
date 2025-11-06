@@ -5,6 +5,7 @@ import OthersPostOptions from "./OthersPostOptions";
 
 export default function Post({ posts }) {
   const [selfUser, setSelfUser] = useState(false);
+  const [getPostId, setGetPostId] = useState();
   const [otherUser, setOtherUser] = useState(false);
   const [isValidLike, setIsValidLike] = useState(false);
   const params = useParams();
@@ -45,13 +46,15 @@ export default function Post({ posts }) {
             </div>
             <span
               onClick={() => {
-                if (post?.userId === params.userId) setSelfUser(true);
-                else setOtherUser(true);
+                if (post?.userId === params.userId) {
+                  setGetPostId(post?._id);
+                  setSelfUser(true);
+                } else setOtherUser(true);
               }}
             >
               ::
             </span>
-            {selfUser && (
+            {selfUser && post?._id === getPostId && (
               <SelfPostOptions postId={post?._id} setSelfUser={setSelfUser} />
             )}
             {otherUser && (
