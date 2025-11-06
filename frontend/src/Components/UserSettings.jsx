@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useOutletContext } from "react-router-dom";
 
 export default function UserSettings() {
-  const [settingsOption, setSettingsOption] = useState(false);
+  const user = useOutletContext();
   return (
     <div className="userSettingsPage">
       <header>
         <h1>Settings</h1>
       </header>
       <div className="settings">
-        <Outlet />
+        <Outlet context={user} />
       </div>
     </div>
   );
