@@ -92,6 +92,23 @@ const getAllPosts = async (req, res) => {
   }
 };
 
+// EDIT USER DETAILS
+const editUserDetails = async (req, res) => {
+  const { fullName, dob, userName, mobile, email, accountType, bioData } =
+    req.body;
+  try {
+    const editUser = await User.findOneAndUpdate(
+      { userName },
+      { fullName, dob, mobile, email, accountType, bioData }
+    );
+    if (editUser) return res.status(200);
+    return res.status(404);
+  } catch (error) {
+    console.error("Error occured: ", error);
+    return res.status(500).json({ message: error });
+  }
+};
+
 // DELETE USER'S POST
 const postDeletion = async (req, res) => {
   const { _id } = req.body;
@@ -132,4 +149,5 @@ module.exports = {
   getAllPosts,
   postDeletion,
   userAccountDeletion,
+  editUserDetails,
 };
