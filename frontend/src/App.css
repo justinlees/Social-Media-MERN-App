@@ -72,6 +72,8 @@
   width: 100vw;
   padding: 0.5rem;
   height: 3rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .userHomePage .content {
@@ -197,6 +199,25 @@
   width: 24px;
   height: 24px;
   border: 4px solid #fff;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+.loadPage {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainLoader {
+  width: 8rem;
+  height: 8rem;
+  border: 1rem solid #555;
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
