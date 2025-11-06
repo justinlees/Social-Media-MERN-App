@@ -9,6 +9,7 @@ import AllPosts from "./Components/AllPosts";
 import UserSettings from "./Components/UserSettings";
 import SettingsOptions from "./Components/settings/SettingsOptions";
 import AccountDeletion from "./Components/settings/AccountDeletion";
+import EditProfile from "./Components/settings/EditProfile";
 function App() {
   return (
     <>
@@ -23,6 +24,7 @@ function App() {
             <Route path="userSettings" element={<UserSettings />}>
               <Route index="true" element={<SettingsOptions />} />
               <Route path="accountDeletion" element={<AccountDeletion />} />
+              <Route path="accountInfo" element={<EditProfile />} />
             </Route>
           </Route>
         </Routes>
