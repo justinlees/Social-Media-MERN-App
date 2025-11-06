@@ -5,7 +5,7 @@ export default function SettingsOptions() {
   return (
     <div>
       <ul>
-        <Link>
+        <Link to={"accountInfo"}>
           <li>Account info</li>
         </Link>
         <Link>
