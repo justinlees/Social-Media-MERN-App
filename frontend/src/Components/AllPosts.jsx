@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useOutletContext } from "react-router-dom";
 import Post from "./post/Post";
 
 export default function AllPosts({ posts }) {
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const [allPosts, setAllPosts] = useState([]);
+  const user = useOutletContext();
 
   useEffect(() => {
     try {
@@ -42,7 +43,7 @@ export default function AllPosts({ posts }) {
   else
     return (
       <div className="allPosts">
-        <Post posts={allPosts} />
+        <Post posts={allPosts} UserName={user?.userName} />
       </div>
     );
 }
