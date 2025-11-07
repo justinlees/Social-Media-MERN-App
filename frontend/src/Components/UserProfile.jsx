@@ -75,7 +75,7 @@ export default function UserProfile() {
       </header>
       <div className="userPosts">
         {userPosts.length ? (
-          <Post posts={userPosts} />
+          <Post posts={userPosts} UserName={user?.userName} />
         ) : (
           <h1>No posts.Click Create Post</h1>
         )}
