@@ -3,24 +3,21 @@ import { Link } from "react-router-dom";
 
 export default function SettingsOptions() {
   return (
-    <div>
+    <>
       <ul>
-        <Link to={"accountInfo"}>
-          <li>Account info</li>
-        </Link>
-        <Link>
-          <li>Blocked Accounts</li>
-        </Link>
-        <Link>
-          <li>Account Privacy</li>
-        </Link>
-        <Link>
-          <li>Logout</li>
-        </Link>
-        <Link to={`accountDeletion`}>
-          <li>Account Deletion</li>
-        </Link>
+        <li>
+          <Link to={"accountInfo"}>Account info</Link>
+        </li>
+        <li>
+          <Link to={""}>Blocked Accounts</Link>
+        </li>
+        <li>
+          <Link to={""}>Account privacy</Link>
+        </li>
+        <li>
+          <Link to={"accountDeletion"}>Account Deletion</Link>
+        </li>
       </ul>
-    </div>
+    </>
   );
 }

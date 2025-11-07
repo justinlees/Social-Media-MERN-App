@@ -36,33 +36,86 @@ export default function EditProfile() {
     }
   };
   return (
-    <div>
+    <div className="editProfilePage">
       <form method="PATCH" onSubmit={handleSubmit}>
-        <input type="text" name="fullName" defaultValue={user?.fullName} />
-        <input type="text" name="userName" readOnly value={user?.userName} />
-        <input type="date" name="dob" defaultValue={user?.dob} />
-        <input type="text" name="mobile" defaultValue={user?.mobile} />
-        <input type="email" name="email" defaultValue={user?.email} />
-        <textarea
-          type="text"
-          name="bioData"
-          defaultValue={user?.bioData}
-          placeholder="Enter bio data"
-        ></textarea>
-        <label>
+        <fieldset>
+          <legend>FullName</legend>
+          <input type="text" name="fullName" defaultValue={user?.fullName} />
+        </fieldset>
+        <fieldset>
+          <legend>UserName</legend>
           <input
-            type="radio"
-            name="accountType"
-            defaultValue={user?.accountType}
-            defaultChecked
+            type="text"
+            name="userName"
+            className="disabledInput"
+            disabled
+            value={user?.userName}
           />
-          {user?.accountType}
-        </label>
-        <label>
-          <input type="radio" name="accountType" defaultValue="private" />
-          private
-        </label>
-        <button type="submit">Save</button>
+        </fieldset>
+        <fieldset>
+          <legend>DOB</legend>
+          <input type="date" name="dob" defaultValue={user?.dob} />
+        </fieldset>
+        <fieldset>
+          <legend>Mobile</legend>
+          <input type="text" name="mobile" defaultValue={user?.mobile} />
+        </fieldset>
+        <fieldset>
+          <legend>Email</legend>
+          <input type="email" name="email" defaultValue={user?.email} />
+        </fieldset>
+        <fieldset>
+          <legend>User Bio</legend>
+          <textarea
+            type="text"
+            name="bioData"
+            defaultValue={user?.bioData}
+            placeholder="Enter bio data"
+          ></textarea>
+        </fieldset>
+        <fieldset>
+          <legend>Account Type</legend>
+          {user?.accountType === "public" ? (
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  name="accountType"
+                  defaultValue={user?.accountType}
+                  defaultChecked
+                />
+                public
+              </label>
+              <label>
+                <input type="radio" name="accountType" defaultValue="private" />
+                private
+              </label>
+            </div>
+          ) : (
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  name="accountType"
+                  defaultValue={user?.accountType}
+                />
+                public
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="accountType"
+                  defaultValue="private"
+                  defaultChecked
+                />
+                private
+              </label>
+            </div>
+          )}
+        </fieldset>
+        <fieldset>
+          <button type="submit">Save</button>
+        </fieldset>
       </form>
     </div>
   );

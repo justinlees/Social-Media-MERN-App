@@ -27,7 +27,7 @@ export default function AccountDeletion() {
     }
   };
   return (
-    <div>
+    <div className="accountDeletionPage">
       <p>DeleteAccount?</p>
       <p>
         Deleting account will Permanently delete all your information of the
