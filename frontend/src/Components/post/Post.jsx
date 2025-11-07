@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import SelfPostOptions from "./SelfPostOptions";
 import OthersPostOptions from "./OthersPostOptions";
+import PostComments from "./PostComments";
 
-export default function Post({ posts }) {
+export default function Post({ posts, UserName }) {
   const [selfUser, setSelfUser] = useState(false);
   const [getPostId, setGetPostId] = useState();
   const [otherUser, setOtherUser] = useState(false);
+  const [openComments, setOpenComments] = useState(false);
   const [isValidLike, setIsValidLike] = useState(false);
   const params = useParams();
 
@@ -83,8 +85,16 @@ export default function Post({ posts }) {
                 {post?.likes}
               </p>
               <p>
-                <span className="material-symbols-outlined">mode_comment</span>
-                {post?.comments}
+                <span
+                  className="material-symbols-outlined"
+                  onClick={() => {
+                    setGetPostId(post?._id);
+                    setOpenComments(true);
+                  }}
+                >
+                  mode_comment
+                </span>
+                *
               </p>
               <p>
                 <span className="material-symbols-outlined">send</span>
@@ -95,6 +105,13 @@ export default function Post({ posts }) {
               {post?.postCaption}
             </p>
           </div>
+          {openComments && post?._id === getPostId && (
+            <PostComments
+              postId={post?._id}
+              UserName={UserName}
+              setOpenComments={setOpenComments}
+            />
+          )}
         </section>
       ))}
     </>
