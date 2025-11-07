@@ -1,5 +1,6 @@
 const User = require("../models/user.model.js");
 const Post = require("../models/post.model.js");
+const Comment = require("../models/postComments.model.js");
 
 // GET USER DETAILS
 const getUserDetails = async (req, res) => {
@@ -92,6 +93,32 @@ const getAllPosts = async (req, res) => {
   }
 };
 
+// GET POST COMMENTS
+const getComments = async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const comments = await Comment.find({ postId });
+    if (comments) return res.status(200).json({ comments });
+    return res.status(404);
+  } catch (error) {
+    console.error("Server Error: ", error);
+    return res.status(500);
+  }
+};
+
+// COMMENTING POST
+const commentPost = async (req, res) => {
+  const { postId, userName, text } = req.body;
+  try {
+    const comment = await Comment.create({ postId, userName, text });
+    if (comment) return res.status(201);
+    return res.status(404);
+  } catch (error) {
+    console.error("Server Error :", error);
+    return res.status(500);
+  }
+};
+
 // EDIT USER DETAILS
 const editUserDetails = async (req, res) => {
   const { fullName, dob, userName, mobile, email, accountType, bioData } =
@@ -150,4 +177,6 @@ module.exports = {
   postDeletion,
   userAccountDeletion,
   editUserDetails,
+  commentPost,
+  getComments,
 };
