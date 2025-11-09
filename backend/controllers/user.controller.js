@@ -116,7 +116,7 @@ const commentPost = async (req, res) => {
         { _id: postId },
         { $inc: { comments: 1 } }
       );
-      return res.status(201);
+      return res.status(201).json({ message: "Comment Created Successfully" });
     }
     return res.status(404);
   } catch (error) {
