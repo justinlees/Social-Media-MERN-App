@@ -94,7 +94,7 @@ export default function Post({ posts, UserName }) {
                 >
                   mode_comment
                 </span>
-                *
+                {post?.comments}
               </p>
               <p>
                 <span className="material-symbols-outlined">send</span>
