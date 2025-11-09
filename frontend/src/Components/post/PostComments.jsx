@@ -6,8 +6,8 @@ export default function PostComments({ postId, UserName, setOpenComments }) {
   const [loading, setLoading] = useState(false);
   const params = useParams();
   useEffect(() => {
-    try {
-      const fetchData = async () => {
+    const fetchData = async () => {
+      try {
         const response = await fetch(
           `http://localhost:5000/${params.userId}/homePage/${postId}/getComments`,
           { method: "GET", headers: { "Content-Type": "application/json" } }
@@ -15,18 +15,18 @@ export default function PostComments({ postId, UserName, setOpenComments }) {
 
         if (response.status === 200) {
           const data = await response.json();
-
           setPostComments(data.comments);
         }
-      };
-      fetchData();
-    } catch (error) {
-      console.error("Error occured while fetching");
-    }
-  }, [params.userId]);
+      } catch (error) {
+        console.error("Error occured while fetching");
+      }
+    };
+    fetchData();
+  }, [params.userId, postId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = {
       userName: UserName,
       postId: postId,
@@ -34,16 +34,20 @@ export default function PostComments({ postId, UserName, setOpenComments }) {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/${params.userId}/homepage/${postId}/commentPost`,
+        `http://localhost:5000/${params.userId}/homePage/${postId}/commentPost`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(formData),
         }
       );
-
+      setLoading(false);
       if (response.status === 201) {
         window.location.reload();
+      } else if (response.status === 404) {
+        alert("Error in posting comment");
       }
     } catch (error) {
       console.error("Error in sending the data");
