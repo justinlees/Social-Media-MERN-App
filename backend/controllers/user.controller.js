@@ -111,7 +111,13 @@ const commentPost = async (req, res) => {
   const { postId, userName, text } = req.body;
   try {
     const comment = await Comment.create({ postId, userName, text });
-    if (comment) return res.status(201);
+    if (comment) {
+      const incrementCommentCount = await Post.findOneAndUpdate(
+        { _id: postId },
+        { $inc: { comments: 1 } }
+      );
+      return res.status(201);
+    }
     return res.status(404);
   } catch (error) {
     console.error("Server Error :", error);
