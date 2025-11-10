@@ -11,6 +11,7 @@ const {
   editUserDetails,
   commentPost,
   getComments,
+  deleteComment,
 } = require("../controllers/user.controller.js");
 
 router.get("/:userId/homePage", getUserDetails);
@@ -22,6 +23,7 @@ router.post("/:userId/homePage/userProfile/likePost", incrementPostLike);
 router.post("/:userId/homePage/:postId/commentPost", commentPost);
 router.patch("/:userId/homePage/userSettings/editProfile", editUserDetails);
 router.delete("/:userId/homePage/userProfile/postDeletion", postDeletion);
+router.delete("/:userId/homePage/deleteComment", deleteComment);
 router.delete(
   "/:userId/homePage/userSettings/accountDeletion",
   userAccountDeletion

@@ -155,6 +155,26 @@ const postDeletion = async (req, res) => {
   }
 };
 
+// DELETE POST COMMENT
+const deleteComment = async (req, res) => {
+  const { _id, postId } = req.body;
+  try {
+    const commentDeletion = await Comment.findOneAndDelete({ _id });
+    if (commentDeletion) {
+      const decrementCommentCount = await Post.findOneAndUpdate(
+        { _id: postId },
+        { $inc: { comments: -1 } }
+      );
+      return res.status(200).json({ message: "Comment Deleted" });
+    }
+
+    return res.status(404).json({ message: "Unable to delete comment" });
+  } catch (error) {
+    console.error("Error Occured: ", error);
+    return res.status(500).json("Server Error");
+  }
+};
+
 // DELETE USER ACCOUNT
 
 const userAccountDeletion = async (req, res) => {
@@ -185,4 +205,5 @@ module.exports = {
   editUserDetails,
   commentPost,
   getComments,
+  deleteComment,
 };
