@@ -43,7 +43,7 @@ export default function AllPosts({ posts }) {
   else
     return (
       <div className="allPosts">
-        <Post posts={allPosts} UserName={user?.userName} />
+        <Post posts={allPosts} user={user} />
       </div>
     );
 }

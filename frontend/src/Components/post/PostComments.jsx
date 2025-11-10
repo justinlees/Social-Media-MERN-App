@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-export default function PostComments({ postId, UserName, setOpenComments }) {
+export default function PostComments({ postId, user, setOpenComments }) {
   const [postComments, setPostComments] = useState([]);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [commentId, setCommentId] = useState();
   const [loading, setLoading] = useState(false);
   const params = useParams();
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function PostComments({ postId, UserName, setOpenComments }) {
     e.preventDefault();
     setLoading(true);
     const formData = {
-      userName: UserName,
+      userName: user?.userName,
       postId: postId,
       text: e.target.text.value,
     };
@@ -54,6 +56,30 @@ export default function PostComments({ postId, UserName, setOpenComments }) {
     }
   };
 
+  const handleDelete = async (commentId) => {
+    const commentData = {
+      _id: commentId,
+      postId: postId,
+    };
+    try {
+      const response = await fetch(
+        `http://localhost:5000/${params.userId}/homePage/deleteComment`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(commentData),
+        }
+      );
+      if (response.status === 200) {
+        window.location.reload();
+      } else if (response.status === 404) {
+        alert("Unable to delete comment");
+      }
+    } catch (error) {
+      console.error("Error in sending request");
+    }
+  };
+
   return (
     <div>
       <span
@@ -70,6 +96,37 @@ export default function PostComments({ postId, UserName, setOpenComments }) {
             <article key={comment?._id}>
               <h3>{comment?.userName}</h3>
               <p>{comment?.text}</p>
+              {comment?.userName === user?.userName && (
+                <span
+                  className="material-symbols-outlined"
+                  onClick={() => {
+                    setCommentId(comment?._id);
+                    setConfirmDelete(true);
+                  }}
+                >
+                  delete
+                </span>
+              )}
+              {confirmDelete && commentId === comment?._id && (
+                <div>
+                  By clicking Delete Permanently, your comment will be deleted
+                  forever
+                  <button
+                    onClick={() => {
+                      handleDelete(comment._id);
+                    }}
+                  >
+                    Delete Permanently
+                  </button>
+                  <button
+                    onClick={() => {
+                      setConfirmDelete(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
             </article>
           ))}
         </div>

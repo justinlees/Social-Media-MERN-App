@@ -4,7 +4,7 @@ import SelfPostOptions from "./SelfPostOptions";
 import OthersPostOptions from "./OthersPostOptions";
 import PostComments from "./PostComments";
 
-export default function Post({ posts, UserName }) {
+export default function Post({ posts, user }) {
   const [selfUser, setSelfUser] = useState(false);
   const [getPostId, setGetPostId] = useState();
   const [otherUser, setOtherUser] = useState(false);
@@ -108,7 +108,7 @@ export default function Post({ posts, UserName }) {
           {openComments && post?._id === getPostId && (
             <PostComments
               postId={post?._id}
-              UserName={UserName}
+              user={user}
               setOpenComments={setOpenComments}
             />
           )}
