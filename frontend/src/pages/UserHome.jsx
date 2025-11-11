@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 
 export default function UserHome() {
   const [user, setUser] = useState(null);
@@ -43,33 +43,54 @@ export default function UserHome() {
             <nav className="sideNav">
               <ul>
                 <li>
-                  <Link relative="true" to={`.`}>
+                  <NavLink
+                    className={({ isActive }) => (isActive ? "activeLink" : "")}
+                    relative="true"
+                    end
+                    to={`.`}
+                  >
                     <span className="material-symbols-outlined">home</span>
-                  </Link>
+                  </NavLink>
                 </li>
                 <li>
-                  <Link>
+                  <NavLink
+                    className={({ isActive }) => (isActive ? "activeLink" : "")}
+                    to="generateNew"
+                    end
+                  >
                     <span className="material-symbols-outlined">
                       wand_stars
                     </span>
-                  </Link>
+                  </NavLink>
                 </li>
                 <li>
-                  <Link>
+                  <NavLink
+                    className={({ isActive }) => (isActive ? "activeLink" : "")}
+                    to="search"
+                    end
+                  >
                     <span className="material-symbols-outlined">search</span>
-                  </Link>
+                  </NavLink>
                 </li>
                 <li>
-                  <Link to={`userProfile`}>
+                  <NavLink
+                    className={({ isActive }) => (isActive ? "activeLink" : "")}
+                    to={`userProfile`}
+                    end
+                  >
                     <span className="material-symbols-outlined">
                       account_circle
                     </span>
-                  </Link>
+                  </NavLink>
                 </li>
                 <li>
-                  <Link to={`userSettings`}>
+                  <NavLink
+                    className={({ isActive }) => (isActive ? "activeLink" : "")}
+                    to={`userSettings`}
+                    end
+                  >
                     <span className="material-symbols-outlined">settings</span>
-                  </Link>
+                  </NavLink>
                 </li>
               </ul>
             </nav>
