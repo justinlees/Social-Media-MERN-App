@@ -65,7 +65,9 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f4f4f4;
+  /* background-color: #f4f4f4; */
+  background-color: #555;
+  color: #f9f9f9;
 }
 
 .userHomePage .titleHeader {
@@ -94,7 +96,7 @@
 .leftSide .sideNav {
   width: 60%;
   height: 80%;
-  background-color: #dedede;
+  background-color: #2a2a2a;
   border-radius: 4rem;
   display: flex;
   justify-content: center;
@@ -126,11 +128,19 @@
   justify-content: center;
   align-items: center;
   text-decoration: none;
+  color: #f9f9f9;
   border-radius: 50%;
+  transition: all 0.2s linear;
 }
 
 .sideNav ul li a:hover {
-  background-color: #acc7ed;
+  background-color: #f9f9f9;
+  color: #2a2a2a;
+}
+
+.sideNav ul li .activeLink {
+  background-color: #f9f9f9;
+  color: #2a2a2a;
 }
 
 .outletLayout {
@@ -257,13 +267,17 @@
   overflow: scroll;
 }
 
+/* Post Card */
+
 .card {
   width: 40%;
   /* min-width: 30rem; */
   height: auto;
   margin: 2rem;
+  border-radius: 8px;
   background-color: #fefefe;
   box-shadow: 1px 1px 4px #aaa;
+  color: #2a2a2a;
 }
 
 .card .cardHeader {
