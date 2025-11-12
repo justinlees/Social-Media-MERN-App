@@ -73,7 +73,11 @@ export default function Post({ posts, user }) {
             <div className="cardReview">
               <p>
                 <span
-                  className="material-symbols-outlined"
+                  className={
+                    post?.likedBy.find((id) => params.userId === id)
+                      ? "material-symbols-outlined like"
+                      : "material-symbols-outlined"
+                  }
                   onClick={() => {
                     if (post?.userId !== params.userId) {
                       handleSubmit(post?._id);
