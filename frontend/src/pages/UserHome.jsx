@@ -46,6 +46,7 @@ export default function UserHome() {
                   <NavLink
                     className={({ isActive }) => (isActive ? "activeLink" : "")}
                     relative="true"
+                    title="Home"
                     end
                     to={`.`}
                   >
@@ -67,6 +68,7 @@ export default function UserHome() {
                   <NavLink
                     className={({ isActive }) => (isActive ? "activeLink" : "")}
                     to="search"
+                    title="Search"
                     end
                   >
                     <span className="material-symbols-outlined">search</span>
@@ -76,6 +78,7 @@ export default function UserHome() {
                   <NavLink
                     className={({ isActive }) => (isActive ? "activeLink" : "")}
                     to={`userProfile`}
+                    title="Profile"
                     end
                   >
                     <span className="material-symbols-outlined">
@@ -87,6 +90,7 @@ export default function UserHome() {
                   <NavLink
                     className={({ isActive }) => (isActive ? "activeLink" : "")}
                     to={`userSettings`}
+                    title="Settings"
                     end
                   >
                     <span className="material-symbols-outlined">settings</span>
