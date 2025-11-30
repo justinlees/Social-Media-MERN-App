@@ -80,8 +80,8 @@ export default function PostComments({ postId, user, setOpenComments }) {
     }
   };
 
-  return (
-    <div>
+  return (            
+    <div className="commentSection">
       <span
         className="material-symbols-outlined"
         onClick={() => {
