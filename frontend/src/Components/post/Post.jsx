@@ -40,7 +40,10 @@ export default function Post({ posts, user }) {
   return (
     <>
       {posts?.map((post) => (
-        <section className="card" key={post?._id}>
+        <section
+          className="card w-[85%] h-[90%] md:w-[30rem] md:h-[40rem] "
+          key={post?._id}
+        >
           <div className="cardHeader">
             <div className="cardUser">
               <img />

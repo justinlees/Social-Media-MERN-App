@@ -31,26 +31,26 @@ export default function UserProfile() {
   }, [params.userId]);
   return (
     <div className="userProfilePage">
-      <header className="profileHeader">
+      <header className="profileHeader h-[8rem] lg:h-[12rem]">
         <div className="userInfo">
-          <div className="userImage">
-            <img />
+          <div className="userImage bg-cyan-500 flex justify-end items-center">
+            <img className="w-[4rem] h-[4rem] bg-gray-500 lg:w-[7rem] lg:h-[7rem]" />
           </div>
           <div className="userDetails">
-            <div className="userName">
-              <h1>
+            <div className="userName lg:gap-4">
+              <h1 className="text-md font-bold lg:text-4xl lg:font-medium ">
                 {user?.userName} <span>*</span>
               </h1>
-              <h2>{user?.fullName}</h2>
+              <h2 className="text-sm md:text-xl">{user?.fullName}</h2>
             </div>
-            <ul>
-              <li>
+            <ul className=" flex flex-col gap-y-2 justify-center items-center lg:flex-row lg:justify-center lg:items-center">
+              <li className="text-xs font-bold flex flex-col justify-center items-center lg:text-xl">
                 <span>234</span>
-                Followers
+                <span>Followers</span>
               </li>
-              <li>
+              <li className="text-xs font-bold flex flex-col justify-center items-center lg:text-xl">
                 <span>437</span>
-                Following
+                <span>Following</span>
               </li>
             </ul>
           </div>
