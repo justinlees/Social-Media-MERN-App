@@ -39,13 +39,19 @@ export default function UserHome() {
           <h1 className="text-3xl">ViewShare</h1>
         </header>
         <div className="content flex flex-col-reverse items-center md:flex-row">
+          {/*Left-side Nav content */}
           <div className="leftSide w-full h-[3rem] flex justify-center items-start md:w-[6rem] md:items-center md:h-full">
-            <nav className="sideNav w-[90%] h-[80%] md:w-[60%] ">
+            {/* Side-Bar */}
+            <nav className="sideNav bg-white  w-[90%] h-[80%] md:w-[60%] md:bg-gray-200 ">
               <ul className="flex justify-evenly items-center md:flex-col">
                 <li className="w-[2rem] h-[2rem] md:w-[2.5rem] md:h-[2.5rem] lg:w-[3rem] lg:h-[3rem] ">
                   <NavLink
-                    className={({ isActive }) => (isActive ? "activeLink" : "")}
                     relative="true"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-500 md:bg-[#01277a] md:bg-blue-500 md:text-white"
+                        : ""
+                    }
                     title="Home"
                     end
                     to={`.`}
@@ -55,7 +61,11 @@ export default function UserHome() {
                 </li>
                 <li className="w-[2rem] h-[2rem] md:w-[2.5rem] md:h-[2.5rem] lg:w-[3rem] lg:h-[3rem] ">
                   <NavLink
-                    className={({ isActive }) => (isActive ? "activeLink" : "")}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-500 md:bg-[#01277a] md:bg-blue-500 md:text-white"
+                        : ""
+                    }
                     to="generateNew"
                     end
                   >
@@ -66,7 +76,11 @@ export default function UserHome() {
                 </li>
                 <li className="w-[2rem] h-[2rem] md:w-[2.5rem] md:h-[2.5rem] lg:w-[3rem] lg:h-[3rem] ">
                   <NavLink
-                    className={({ isActive }) => (isActive ? "activeLink" : "")}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-500 md:bg-[#01277a] md:bg-blue-500 md:text-white"
+                        : ""
+                    }
                     to="search"
                     title="Search"
                     end
@@ -76,7 +90,11 @@ export default function UserHome() {
                 </li>
                 <li className="w-[2rem] h-[2rem] md:w-[2.5rem] md:h-[2.5rem] lg:w-[3rem] lg:h-[3rem] ">
                   <NavLink
-                    className={({ isActive }) => (isActive ? "activeLink" : "")}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-500 md:bg-[#01277a] md:bg-blue-500 md:text-white"
+                        : ""
+                    }
                     to={`userProfile`}
                     title="Profile"
                     end
@@ -88,7 +106,11 @@ export default function UserHome() {
                 </li>
                 <li className="w-[2rem] h-[2rem] md:w-[2.5rem] md:h-[2.5rem] lg:w-[3rem] lg:h-[3rem] ">
                   <NavLink
-                    className={({ isActive }) => (isActive ? "activeLink" : "")}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-500 md:bg-[#01277a] md:bg-blue-500 md:text-white"
+                        : ""
+                    }
                     to={`userSettings`}
                     title="Settings"
                     end

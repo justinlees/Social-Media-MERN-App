@@ -55,7 +55,7 @@ export default function UserProfile() {
             </ul>
           </div>
         </div>
-        <section className="buttonsArea">
+        <section className="buttonsArea w-full flex">
           <div className="dummy"></div>
           <div>
             <div className="buttons">
@@ -67,7 +67,7 @@ export default function UserProfile() {
               >
                 Create Post
               </button>
-              <button>Message</button>
+              <button className="bg-black text-white">Message</button>
             </div>
             <div className="dummy2"></div>
           </div>
