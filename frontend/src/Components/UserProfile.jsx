@@ -31,17 +31,32 @@ export default function UserProfile() {
   }, [params.userId]);
   return (
     <div className="userProfilePage">
-      <header className="profileHeader h-[8rem] lg:h-[12rem]">
+      <header className="profileHeader bg-gray-200 h-[8rem] md:h-[12rem]">
         <div className="userInfo">
-          <div className="userImage bg-cyan-500 flex justify-end items-center">
-            <img className="w-[4rem] h-[4rem] bg-gray-500 lg:w-[7rem] lg:h-[7rem]" />
+          <div className="userImage flex justify-end items-center">
+            <img className="w-[6rem] h-[6rem] bg-gray-100 md:w-[8rem] md:h-[8rem]" />
           </div>
           <div className="userDetails">
-            <div className="userName lg:gap-4">
-              <h1 className="text-md font-bold lg:text-4xl lg:font-medium ">
+            <div className="w-full h-full flex flex-col justify-center items-left md:gap-3">
+              <h1 className="text-md font-bold md:text-4xl md:font-medium ">
                 {user?.userName} <span>*</span>
               </h1>
               <h2 className="text-sm md:text-xl">{user?.fullName}</h2>
+              <section className="buttonArea">
+                <div>
+                  <button
+                    className="positiveBtn text-sm w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer"
+                    onClick={() => {
+                      setOpenPost(true);
+                    }}
+                  >
+                    Create Post
+                  </button>
+                  <button className="text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer">
+                    Message
+                  </button>
+                </div>
+              </section>
             </div>
             <ul className=" flex flex-col gap-y-2 justify-center items-center lg:flex-row lg:justify-center lg:items-center">
               <li className="text-xs font-bold flex flex-col justify-center items-center lg:text-xl">
@@ -55,23 +70,6 @@ export default function UserProfile() {
             </ul>
           </div>
         </div>
-        <section className="buttonsArea w-full flex">
-          <div className="dummy"></div>
-          <div>
-            <div className="buttons">
-              <button
-                className="positiveBtn"
-                onClick={() => {
-                  setOpenPost(true);
-                }}
-              >
-                Create Post
-              </button>
-              <button className="bg-black text-white">Message</button>
-            </div>
-            <div className="dummy2"></div>
-          </div>
-        </section>
       </header>
       <div className="userPosts">
         {userPosts.length ? (

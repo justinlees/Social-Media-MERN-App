@@ -48,14 +48,15 @@ export default function PostCreation({ setOpenPost, postUserName }) {
             <label className="positiveBtn">
               Add Image
               <span className="material-symbols-outlined">upload</span>
-              <input type="file" name="postImage" required />
+              <input type="file" name="postImage" />
             </label>
           </div>
-          <div className="postPreview">
+          {/* <div className="postPreview">
             <img />
-          </div>
+          </div> */}
           <div className="postCaptionInput">
             <textarea
+              className="border border-1 border-gray rounded-sm"
               placeholder="Enter Caption"
               name="postCaption"
               required
@@ -65,7 +66,9 @@ export default function PostCreation({ setOpenPost, postUserName }) {
             <button type="submit" className="positiveBtn">
               Post
             </button>
-            <button type="reset">Clear</button>
+            <button type="reset" className="bg-black text-white font-bold">
+              Clear
+            </button>
           </div>
         </form>
       </div>
