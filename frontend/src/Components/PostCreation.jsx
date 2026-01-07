@@ -13,7 +13,9 @@ export default function PostCreation({ setOpenPost, postUserName }) {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/${params.userId}/homePage/userProfile/postCreation`,
+        `${import.meta.env.VITE_BASE_URL}/${
+          params.userId
+        }/homePage/userProfile/postCreation`,
         {
           method: "POST",
           headers: {
@@ -33,7 +35,7 @@ export default function PostCreation({ setOpenPost, postUserName }) {
 
   return (
     <div className="postCreationPage">
-      <div className="postCreationCard">
+      <div className="postCreationCard w-sm h-[70%] rounded-md shadow-md border-1 border-gray-300 md:w-lg md:h-[70%] ">
         <header>
           <button
             onClick={() => {
@@ -48,7 +50,7 @@ export default function PostCreation({ setOpenPost, postUserName }) {
             <label className="positiveBtn">
               Add Image
               <span className="material-symbols-outlined">upload</span>
-              <input type="file" name="postImage" />
+              <input type="file" name="postImage" required />
             </label>
           </div>
           {/* <div className="postPreview">

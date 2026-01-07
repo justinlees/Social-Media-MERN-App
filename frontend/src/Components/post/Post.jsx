@@ -19,7 +19,9 @@ export default function Post({ posts, user }) {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/${params.userId}/homePage/userProfile/likePost`,
+        `${import.meta.env.VITE_BASE_URL}/${
+          params.userId
+        }/homePage/userProfile/likePost`,
         {
           method: "POST",
           headers: {

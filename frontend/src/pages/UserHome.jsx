@@ -10,7 +10,7 @@ export default function UserHome() {
       const fetchData = async () => {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:5000/${params.userId}/homePage`
+          `${import.meta.env.VITE_BASE_URL}/${params.userId}/homePage`
         );
         const data = await response.json();
         if (response.status === 200) {

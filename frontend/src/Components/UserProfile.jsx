@@ -12,7 +12,9 @@ export default function UserProfile() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/${params.userId}/homePage/userProfile`
+          `${import.meta.env.VITE_BASE_URL}/${
+            params.userId
+          }/homePage/userProfile`
         );
 
         if (response.status === 200) {
@@ -77,11 +79,13 @@ export default function UserProfile() {
         ) : (
           <h1>No posts.Click Create Post</h1>
         )}
+        {openPost && (
+          <PostCreation
+            setOpenPost={setOpenPost}
+            postUserName={user?.userName}
+          />
+        )}
       </div>
-
-      {openPost && (
-        <PostCreation setOpenPost={setOpenPost} postUserName={user?.userName} />
-      )}
     </div>
   );
 }

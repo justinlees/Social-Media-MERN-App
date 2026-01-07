@@ -11,7 +11,9 @@ export default function PostComments({ postId, user, setOpenComments }) {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/${params.userId}/homePage/${postId}/getComments`,
+          `${import.meta.env.VITE_BASE_URL}/${
+            params.userId
+          }/homePage/${postId}/getComments`,
           { method: "GET", headers: { "Content-Type": "application/json" } }
         );
 
@@ -36,7 +38,9 @@ export default function PostComments({ postId, user, setOpenComments }) {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/${params.userId}/homePage/${postId}/commentPost`,
+        `${import.meta.env.VITE_BASE_URL}/${
+          params.userId
+        }/homePage/${postId}/commentPost`,
         {
           method: "POST",
           headers: {
@@ -63,7 +67,9 @@ export default function PostComments({ postId, user, setOpenComments }) {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/${params.userId}/homePage/deleteComment`,
+        `${import.meta.env.VITE_BASE_URL}/${
+          params.userId
+        }/homePage/deleteComment`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -80,7 +86,7 @@ export default function PostComments({ postId, user, setOpenComments }) {
     }
   };
 
-  return (            
+  return (
     <div className="commentSection">
       <span
         className="material-symbols-outlined"

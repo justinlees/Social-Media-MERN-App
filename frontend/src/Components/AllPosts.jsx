@@ -13,7 +13,7 @@ export default function AllPosts({ posts }) {
       const fetchData = async () => {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:5000/${params.userId}/homePage/allPosts`
+          `${import.meta.env.VITE_BASE_URL}/${params.userId}/homePage/allPosts`
         );
 
         if (response.status === 200) {

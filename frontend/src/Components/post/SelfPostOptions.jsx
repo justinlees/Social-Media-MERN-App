@@ -10,7 +10,9 @@ export default function SelfPostOptions({ postId, setSelfUser }) {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/${params.userId}/homePage/userProfile/postDeletion`,
+        `${import.meta.env.VITE_BASE_URL}/${
+          params.userId
+        }/homePage/userProfile/postDeletion`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },

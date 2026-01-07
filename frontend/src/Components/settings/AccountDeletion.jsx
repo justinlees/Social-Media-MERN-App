@@ -8,7 +8,9 @@ export default function AccountDeletion() {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/${params.userId}/homePage/userSettings/accountDeletion`,
+        `${import.meta.env.VITE_BASE_URL}/${
+          params.userId
+        }/homePage/userSettings/accountDeletion`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },

@@ -11,13 +11,16 @@ export default function SignIn() {
       password: e.target.password.value,
     };
     try {
-      const response = await fetch(`http://localhost:5000/account/signIn`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/account/signIn`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       setLoading(false);
       if (response.status === 200) {
         const data = await response.json();

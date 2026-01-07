@@ -19,7 +19,9 @@ export default function EditProfile() {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/${params.userId}/homePage/userSettings/editProfile`,
+        `${import.meta.env.VITE_BASE_URL}/${
+          params.userId
+        }/homePage/userSettings/editProfile`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
