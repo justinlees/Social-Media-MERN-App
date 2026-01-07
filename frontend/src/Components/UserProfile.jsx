@@ -59,13 +59,13 @@ export default function UserProfile() {
               </section>
             </div>
             <ul className=" flex flex-col gap-y-2 justify-center items-center lg:flex-row lg:justify-center lg:items-center">
-              <li className="text-xs font-bold flex flex-col justify-center items-center lg:text-xl">
-                <span>234</span>
-                <span>Followers</span>
+              <li className="text-xs flex flex-col justify-center items-center md:text-lg">
+                <span className="font-bold text-md md:text-xl">234</span>
+                Followers
               </li>
-              <li className="text-xs font-bold flex flex-col justify-center items-center lg:text-xl">
-                <span>437</span>
-                <span>Following</span>
+              <li className="text-xs flex flex-col justify-center items-center md:text-lg">
+                <span className="font-bold text-md md:text-xl">437</span>
+                Following
               </li>
             </ul>
           </div>
