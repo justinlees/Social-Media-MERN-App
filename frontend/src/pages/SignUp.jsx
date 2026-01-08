@@ -38,8 +38,12 @@ export default function SignUp() {
   };
 
   return (
-    <div className="account">
-      <form method="POST" onSubmit={handleSubmit}>
+    <div className="account w-screen h-screen">
+      <form
+        className="w-[90%] h-auto shadow-md md:w-md"
+        method="POST"
+        onSubmit={handleSubmit}
+      >
         <h2>SignUp</h2>
         <fieldset>
           <input
