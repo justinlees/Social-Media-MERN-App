@@ -18,6 +18,25 @@ const getUserDetails = async (req, res) => {
   }
 };
 
+//SEARCH USER ACCOUNTS
+const searchAccounts = async (req, res) => {
+  const searchTerm = req.query.account || "";
+  try {
+    if (searchTerm) {
+      const accounts = await User.find({
+        $or: [
+          { userName: { $regex: `${searchTerm}` } },
+          { fullName: { $regex: `${searchTerm}` } },
+        ],
+      }).select("-password");
+      if (accounts.length) return res.status(200).json({ accounts });
+    }
+    return res.status(200).json({ message: "Search Accounts" });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
 // GET USER POSTS
 const getUserPosts = async (req, res) => {
   const { userId } = req.params;
@@ -196,6 +215,7 @@ const userAccountDeletion = async (req, res) => {
 
 module.exports = {
   getUserDetails,
+  searchAccounts,
   getUserPosts,
   userPostCreation,
   incrementPostLike,

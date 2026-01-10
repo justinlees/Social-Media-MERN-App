@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const {
   getUserDetails,
+  searchAccounts,
   getUserPosts,
   userPostCreation,
   incrementPostLike,
@@ -18,6 +19,8 @@ router.get("/:userId/homePage", getUserDetails);
 router.get("/:userId/homePage/allPosts", getAllPosts);
 router.get("/:userId/homePage/userProfile", getUserPosts);
 router.get("/:userId/homePage/:postId/getComments", getComments);
+router.get("/:userId/homePage/search", searchAccounts);
+
 router.post("/:userId/homePage/userProfile/postCreation", userPostCreation);
 router.post("/:userId/homePage/userProfile/likePost", incrementPostLike);
 router.post("/:userId/homePage/:postId/commentPost", commentPost);
