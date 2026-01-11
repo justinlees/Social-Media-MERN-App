@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import SelfPostOptions from "./SelfPostOptions";
 import OthersPostOptions from "./OthersPostOptions";
 import PostComments from "./PostComments";
@@ -49,7 +49,9 @@ export default function Post({ posts, user }) {
           <div className="cardHeader">
             <div className="cardUser">
               <img />
-              <p>{post?.userName}</p>
+              <p>
+                <Link to={`${post?.userId}`}>{post?.userName}</Link>
+              </p>
             </div>
             <span
               onClick={() => {
@@ -110,7 +112,9 @@ export default function Post({ posts, user }) {
               </p>
             </div>
             <p className="caption">
-              <span>{post?.userName}</span>
+              <span>
+                <Link to={`${post?.userId}`}>{post?.userName}</Link>
+              </span>
               {post?.postCaption}
             </p>
           </div>
