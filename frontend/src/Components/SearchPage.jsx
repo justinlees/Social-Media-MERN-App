@@ -5,7 +5,6 @@ import SearchAccountProfile from "./SearchAccountProfile";
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchAccounts, setAccounts] = useState([]);
-  const [accountInfo, setAccountInfo] = useState(null);
   const params = useParams();
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -47,20 +46,12 @@ export default function Search() {
         <div>
           <ul>
             {searchAccounts?.map((account) => (
-              <li
-                key={account._id}
-                onClick={() => {
-                  setAccountInfo(account);
-                }}
-              >
-                <Link to={`${account?._id}`}>{account.userName}</Link>
+              <li key={account._id}>
+                <Link to={`../${account?._id}`}>{account.userName}</Link>
               </li>
             ))}
           </ul>
         </div>
-      </div>
-      <div className="searchAccountProfile w-full h-full">
-        <Outlet context={accountInfo} />
       </div>
     </div>
   );

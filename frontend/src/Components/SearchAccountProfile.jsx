@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import Post from "./post/Post.jsx";
 export default function SearchAccountProfile() {
-  const accountInfo = useOutletContext();
-  console.log(accountInfo);
+  const [accountInfo, setAccountInfo] = useState();
   const { userId, searchUserId } = useParams();
   const [searchPosts, setSearchPosts] = useState([]);
+
+  console.log(searchPosts);
   useEffect(() => {
-    const fetchSearchPosts = async () => {
+    const fetchSearchUser = async () => {
       try {
         const response = await fetch(
-          `${
-            import.meta.env.VITE_BASE_URL
-          }/${userId}/homepage/search/${searchUserId}`,
+          `${import.meta.env.VITE_BASE_URL}/${userId}/homePage/${searchUserId}`,
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -20,12 +20,13 @@ export default function SearchAccountProfile() {
         const data = await response.json();
         if (data.searchUserPosts) {
           setSearchPosts(data.searchUserPosts);
+          setAccountInfo(data.searchUser);
         }
       } catch (error) {
         console.log("Server Error", error);
       }
     };
-    fetchSearchPosts();
+    fetchSearchUser();
   }, [searchUserId, userId]);
   return (
     <div className="userProfilePage">
@@ -66,7 +67,7 @@ export default function SearchAccountProfile() {
             </div>
           </header>
           <div className="userPosts">
-            {searchPosts?.length ? (
+            {searchPosts.length ? (
               <Post posts={searchPosts} user={accountInfo} />
             ) : (
               <h1>No posts yet</h1>
