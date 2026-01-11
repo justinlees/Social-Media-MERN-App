@@ -37,6 +37,18 @@ const searchAccounts = async (req, res) => {
   }
 };
 
+//GET SEARCH ACCOUNT POSTS
+const searchAccountPosts = async (req, res) => {
+  const { searchUserId } = req.params;
+  try {
+    const searchUserPosts = await Post.find({ _id: searchUserId });
+    if (searchUserPosts.length)
+      return res.status(200).json({ searchUserPosts });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
 // GET USER POSTS
 const getUserPosts = async (req, res) => {
   const { userId } = req.params;
@@ -216,6 +228,7 @@ const userAccountDeletion = async (req, res) => {
 module.exports = {
   getUserDetails,
   searchAccounts,
+  searchAccountPosts,
   getUserPosts,
   userPostCreation,
   incrementPostLike,

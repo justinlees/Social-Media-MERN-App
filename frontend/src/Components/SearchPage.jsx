@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
+import SearchAccountProfile from "./SearchAccountProfile";
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,21 +53,14 @@ export default function Search() {
                   setAccountInfo(account);
                 }}
               >
-                {account.userName}
+                <Link to={`${account?._id}`}>{account.userName}</Link>
               </li>
             ))}
           </ul>
         </div>
       </div>
-      <div>
-        {accountInfo && (
-          <ul>
-            <li>{accountInfo.userName}</li>
-            <li>{accountInfo.fullName}</li>
-            <li>{accountInfo.bio}</li>
-            <li>{accountInfo.profileImage}</li>
-          </ul>
-        )}
+      <div className="searchAccountProfile w-full h-full">
+        <Outlet context={accountInfo} />
       </div>
     </div>
   );

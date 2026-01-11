@@ -11,6 +11,7 @@ import SettingsOptions from "./Components/settings/SettingsOptions";
 import AccountDeletion from "./Components/settings/AccountDeletion";
 import EditProfile from "./Components/settings/EditProfile";
 import Search from "./Components/SearchPage";
+import SearchAccountProfile from "./Components/SearchAccountProfile";
 function App() {
   return (
     <>
@@ -21,7 +22,9 @@ function App() {
           <Route path="/account/signIn" element={<SignIn />} />
           <Route path="/:userId/homePage" element={<UserHome />}>
             <Route index="true" element={<AllPosts />} />
-            <Route path="search" element={<Search />} />
+            <Route path="search" element={<Search />}>
+              <Route path=":searchUserId" element={<SearchAccountProfile />} />
+            </Route>
             <Route path="userProfile" element={<UserProfile />} />
             <Route path="userSettings" element={<UserSettings />}>
               <Route index="true" element={<SettingsOptions />} />

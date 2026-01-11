@@ -13,6 +13,7 @@ const {
   commentPost,
   getComments,
   deleteComment,
+  searchAccountPosts,
 } = require("../controllers/user.controller.js");
 
 router.get("/:userId/homePage", getUserDetails);
@@ -20,6 +21,7 @@ router.get("/:userId/homePage/allPosts", getAllPosts);
 router.get("/:userId/homePage/userProfile", getUserPosts);
 router.get("/:userId/homePage/:postId/getComments", getComments);
 router.get("/:userId/homePage/search", searchAccounts);
+router.get("/:userId/homePag/search/:searchUserId", searchAccountPosts);
 
 router.post("/:userId/homePage/userProfile/postCreation", userPostCreation);
 router.post("/:userId/homePage/userProfile/likePost", incrementPostLike);
