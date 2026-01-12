@@ -1,6 +1,8 @@
 const User = require("../models/user.model.js");
 const Post = require("../models/post.model.js");
 const Comment = require("../models/postComments.model.js");
+const Following = require("../models/following.model.js");
+const Followers = require("../models/followers.model.js");
 
 // GET USER DETAILS
 const getUserDetails = async (req, res) => {
@@ -114,6 +116,63 @@ const incrementPostLike = async (req, res) => {
     }
   } catch (error) {
     console.error("Server Error", error);
+  }
+};
+
+//FOLLOWING A USER
+const followUser = async (req, res) => {
+  const { userId, followingId, follwingUsername, userName } = req.body;
+  try {
+    const getUserName = await User.findOne({ _id: userId });
+
+    const followingExist = await Following.findOne({ userId, followingId });
+    if (!followingExist) {
+      const followingUser = await Following.create({
+        userId,
+        followingId,
+        follwingUsername,
+      });
+      const followedUser = await Followers.create({
+        userId: followingId,
+        followerId: userId,
+        follwerUsername: getUserName.userName,
+      });
+      const incrementFollowingUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { $inc: { following: 1 } }
+      );
+      const incrementFollowedUser = await User.findOneAndUpdate(
+        { _id: followingId },
+        { $inc: { followers: 1 } }
+      );
+      if (incrementFollowedUser) {
+        return res.status(200).json({ message: "increment success" });
+      }
+    } else {
+      const followingUser = await Following.deleteOne({
+        userId,
+        followingId,
+        follwingUsername,
+      });
+      const followedUser = await Followers.deleteOne({
+        userId: followingId,
+        followerId: userId,
+        follwerUsername: getUserName.userName,
+      });
+      const decrementFollowingUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { $inc: { following: -1 } }
+      );
+      const decrementFollowedUser = await User.findOneAndUpdate(
+        { _id: followingId },
+        { $inc: { followers: -1 } }
+      );
+      if (decrementFollowedUser) {
+        return res.status(200).json({ message: "decrement success" });
+      }
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error", error });
   }
 };
 
@@ -235,6 +294,7 @@ module.exports = {
   getUserPosts,
   userPostCreation,
   incrementPostLike,
+  followUser,
   getAllPosts,
   postDeletion,
   userAccountDeletion,

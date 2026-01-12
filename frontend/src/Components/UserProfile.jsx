@@ -62,11 +62,15 @@ export default function UserProfile() {
             </div>
             <ul className=" flex flex-col gap-y-2 justify-center items-center lg:flex-row lg:justify-center lg:items-center">
               <li className="text-xs flex flex-col justify-center items-center md:text-lg">
-                <span className="font-bold text-md md:text-xl">234</span>
+                <span className="font-bold text-md md:text-xl">
+                  {user?.followers}
+                </span>
                 Followers
               </li>
               <li className="text-xs flex flex-col justify-center items-center md:text-lg">
-                <span className="font-bold text-md md:text-xl">437</span>
+                <span className="font-bold text-md md:text-xl">
+                  {user?.following}
+                </span>
                 Following
               </li>
             </ul>

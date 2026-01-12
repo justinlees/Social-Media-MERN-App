@@ -6,7 +6,31 @@ export default function SearchAccountProfile() {
   const { userId, searchUserId } = useParams();
   const [searchPosts, setSearchPosts] = useState([]);
 
-  console.log(searchPosts);
+  const handleFollow = async (followingUsername) => {
+    const followData = {
+      userId: userId,
+      followingId: searchUserId,
+      followingUsername: followingUsername,
+    };
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/${userId}/following/${searchUserId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(followData),
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Request Done");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log("Error in sending following request", error);
+    }
+  };
+
   useEffect(() => {
     const fetchSearchUser = async () => {
       try {
@@ -47,6 +71,12 @@ export default function SearchAccountProfile() {
                   </h2>
                   <section className="buttonArea">
                     <div>
+                      <button
+                        className="positiveBtn text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer"
+                        onClick={() => handleFollow(accountInfo?.userName)}
+                      >
+                        Follow
+                      </button>
                       <button className="text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer">
                         Message
                       </button>
@@ -55,11 +85,15 @@ export default function SearchAccountProfile() {
                 </div>
                 <ul className=" flex flex-col gap-y-2 justify-center items-center lg:flex-row lg:justify-center lg:items-center">
                   <li className="text-xs flex flex-col justify-center items-center md:text-lg">
-                    <span className="font-bold text-md md:text-xl">234</span>
+                    <span className="font-bold text-md md:text-xl">
+                      {accountInfo?.followers}
+                    </span>
                     Followers
                   </li>
                   <li className="text-xs flex flex-col justify-center items-center md:text-lg">
-                    <span className="font-bold text-md md:text-xl">437</span>
+                    <span className="font-bold text-md md:text-xl">
+                      {accountInfo?.following}
+                    </span>
                     Following
                   </li>
                 </ul>
