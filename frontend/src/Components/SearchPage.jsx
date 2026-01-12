@@ -47,7 +47,15 @@ export default function Search() {
           <ul>
             {searchAccounts?.map((account) => (
               <li key={account._id}>
-                <Link to={`../${account?._id}`}>{account.userName}</Link>
+                <Link
+                  to={
+                    account._id !== params.userId
+                      ? `/${params.userId}/homePage/${account._id}`
+                      : `/${params.userId}/homePage/userProfile`
+                  }
+                >
+                  {account?.userName}
+                </Link>
               </li>
             ))}
           </ul>
