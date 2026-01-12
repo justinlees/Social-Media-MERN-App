@@ -50,7 +50,15 @@ export default function Post({ posts, user }) {
             <div className="cardUser">
               <img />
               <p>
-                <Link to={`${post?.userId}`}>{post?.userName}</Link>
+                <Link
+                  to={
+                    post?.userId !== params.userId
+                      ? `/${params.userId}/homePage/${post?.userId}`
+                      : `/${params.userId}/homePage/userProfile`
+                  }
+                >
+                  {post?.userName}
+                </Link>
               </p>
             </div>
             <span
@@ -113,7 +121,15 @@ export default function Post({ posts, user }) {
             </div>
             <p className="caption">
               <span>
-                <Link to={`${post?.userId}`}>{post?.userName}</Link>
+                <Link
+                  to={
+                    post?.userId !== params.userId
+                      ? `/${params.userId}/homePage/${post?.userId}`
+                      : `/${params.userId}/homePage/userProfile`
+                  }
+                >
+                  {post?.userName}
+                </Link>
               </span>
               {post?.postCaption}
             </p>
