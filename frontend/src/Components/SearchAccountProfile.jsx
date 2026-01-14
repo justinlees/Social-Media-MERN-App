@@ -5,6 +5,10 @@ export default function SearchAccountProfile() {
   const [accountInfo, setAccountInfo] = useState();
   const { userId, searchUserId } = useParams();
   const [searchPosts, setSearchPosts] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [followings, setFollowings] = useState([]);
+  const [openFollowers, setOpenFollowers] = useState(false);
+  const [openFollowing, setOpenFollowing] = useState(false);
 
   const handleFollow = async (followingUsername) => {
     const followData = {
@@ -45,6 +49,8 @@ export default function SearchAccountProfile() {
         if (data.searchUserPosts) {
           setSearchPosts(data.searchUserPosts);
           setAccountInfo(data.searchUser);
+          setFollowers(data.searchUserFollowers);
+          setFollowings(data.searchUserFollowings);
         }
       } catch (error) {
         console.log("Server Error", error);
@@ -84,13 +90,29 @@ export default function SearchAccountProfile() {
                   </section>
                 </div>
                 <ul className=" flex flex-col gap-y-2 justify-center items-center lg:flex-row lg:justify-center lg:items-center">
-                  <li className="text-xs flex flex-col justify-center items-center md:text-lg">
+                  <li
+                    className="text-xs flex flex-col justify-center items-center md:text-lg"
+                    onClick={() => {
+                      setOpenFollowers(true);
+                      setOpenFollowing(false);
+                      console.log(followers);
+                      console.log("Clicked Followers");
+                    }}
+                  >
                     <span className="font-bold text-md md:text-xl">
                       {accountInfo?.followers}
                     </span>
                     Followers
                   </li>
-                  <li className="text-xs flex flex-col justify-center items-center md:text-lg">
+                  <li
+                    className="text-xs flex flex-col justify-center items-center md:text-lg"
+                    onClick={() => {
+                      setOpenFollowers(false);
+                      setOpenFollowing(true);
+                      console.log(followings);
+                      console.log("Clicked Followings");
+                    }}
+                  >
                     <span className="font-bold text-md md:text-xl">
                       {accountInfo?.following}
                     </span>
@@ -100,11 +122,26 @@ export default function SearchAccountProfile() {
               </div>
             </div>
           </header>
+
           <div className="userPosts">
             {searchPosts.length ? (
               <Post posts={searchPosts} user={accountInfo} />
             ) : (
               <h1>No posts yet</h1>
+            )}
+            {openFollowers && (
+              <div>
+                {followers?.map((follower) => (
+                  <p key={follower?._id}>{follower?.followerUsername}</p>
+                ))}
+              </div>
+            )}
+            {openFollowing && (
+              <div>
+                {followings?.map((following) => (
+                  <p key={following?._id}>{following?.followingUsername}</p>
+                ))}
+              </div>
             )}
           </div>
         </>

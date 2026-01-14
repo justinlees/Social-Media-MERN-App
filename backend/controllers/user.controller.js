@@ -47,8 +47,19 @@ const searchAccountUser = async (req, res) => {
     const searchUser = await User.findOne({ _id: searchUserId }).select(
       "-password"
     );
+    const searchUserFollowers = await Followers.find({
+      userId: searchUserId,
+    });
+    const searchUserFollowings = await Following.find({
+      followingId: searchUserId,
+    });
     if (searchUserPosts.length || searchUser)
-      return res.status(200).json({ searchUserPosts, searchUser });
+      return res.status(200).json({
+        searchUserPosts,
+        searchUser,
+        searchUserFollowers,
+        searchUserFollowings,
+      });
   } catch (error) {
     return res.status(500).json({ message: "Server Error" });
   }
@@ -121,7 +132,7 @@ const incrementPostLike = async (req, res) => {
 
 //FOLLOWING A USER
 const followUser = async (req, res) => {
-  const { userId, followingId, follwingUsername, userName } = req.body;
+  const { userId, followingId, followingUsername } = req.body;
   try {
     const getUserName = await User.findOne({ _id: userId });
 
@@ -130,12 +141,12 @@ const followUser = async (req, res) => {
       const followingUser = await Following.create({
         userId,
         followingId,
-        follwingUsername,
+        followingUsername,
       });
       const followedUser = await Followers.create({
         userId: followingId,
         followerId: userId,
-        follwerUsername: getUserName.userName,
+        followerUsername: getUserName.userName,
       });
       const incrementFollowingUser = await User.findOneAndUpdate(
         { _id: userId },
@@ -152,12 +163,12 @@ const followUser = async (req, res) => {
       const followingUser = await Following.deleteOne({
         userId,
         followingId,
-        follwingUsername,
+        followingUsername,
       });
       const followedUser = await Followers.deleteOne({
         userId: followingId,
         followerId: userId,
-        follwerUsername: getUserName.userName,
+        followerUsername: getUserName.userName,
       });
       const decrementFollowingUser = await User.findOneAndUpdate(
         { _id: userId },
