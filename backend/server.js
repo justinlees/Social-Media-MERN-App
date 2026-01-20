@@ -29,6 +29,10 @@ app.use("/", userRouter);
 
 io.on("connection", (socket) => {
   console.log("User Connected:", socket.id);
+  socket.on("sendMessage", (formData) => {
+    console.log(formData);
+    io.emit("chatMsg", formData);
+  });
 });
 
 connectDB().then(() => {

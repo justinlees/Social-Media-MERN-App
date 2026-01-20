@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import Post from "./post/Post.jsx";
+import Message from "./Message.jsx";
 export default function SearchAccountProfile() {
   const [accountInfo, setAccountInfo] = useState();
   const { userId, searchUserId } = useParams();
@@ -23,7 +24,7 @@ export default function SearchAccountProfile() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(followData),
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -43,7 +44,7 @@ export default function SearchAccountProfile() {
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
         const data = await response.json();
         if (data.searchUserPosts) {
@@ -84,7 +85,7 @@ export default function SearchAccountProfile() {
                         Follow
                       </button>
                       <button className="text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer">
-                        Message
+                        <Link to="message">Message</Link>
                       </button>
                     </div>
                   </section>
@@ -144,6 +145,7 @@ export default function SearchAccountProfile() {
               </div>
             )}
           </div>
+          <Outlet context={{ accountInfo, followers, followings }} />
         </>
       )}
     </div>
