@@ -3,6 +3,7 @@ const Post = require("../models/post.model.js");
 const Comment = require("../models/postComments.model.js");
 const Following = require("../models/following.model.js");
 const Followers = require("../models/followers.model.js");
+const Message = require("../models/message.model.js");
 
 // GET USER DETAILS
 const getUserDetails = async (req, res) => {
@@ -45,7 +46,7 @@ const searchAccountUser = async (req, res) => {
   try {
     const searchUserPosts = await Post.find({ userId: searchUserId });
     const searchUser = await User.findOne({ _id: searchUserId }).select(
-      "-password"
+      "-password",
     );
     const searchUserFollowers = await Followers.find({
       userId: searchUserId,
@@ -109,7 +110,7 @@ const incrementPostLike = async (req, res) => {
     if (!alreadyLiked.likedBy.find(() => userId)) {
       const incrementLike = await Post.findOneAndUpdate(
         { _id },
-        { $inc: { likes: 1 }, $push: { likedBy: userId } }
+        { $inc: { likes: 1 }, $push: { likedBy: userId } },
       );
       if (incrementLike) {
         return res.status(200).json({ message: "Liked the post" });
@@ -118,7 +119,7 @@ const incrementPostLike = async (req, res) => {
     } else {
       const decrementLike = await Post.findOneAndUpdate(
         { _id },
-        { $inc: { likes: -1 }, $pull: { likedBy: userId } }
+        { $inc: { likes: -1 }, $pull: { likedBy: userId } },
       );
       if (decrementLike) {
         return res.status(200).json({ message: "de-Liked the post" });
@@ -150,11 +151,11 @@ const followUser = async (req, res) => {
       });
       const incrementFollowingUser = await User.findOneAndUpdate(
         { _id: userId },
-        { $inc: { following: 1 } }
+        { $inc: { following: 1 } },
       );
       const incrementFollowedUser = await User.findOneAndUpdate(
         { _id: followingId },
-        { $inc: { followers: 1 } }
+        { $inc: { followers: 1 } },
       );
       if (incrementFollowedUser) {
         return res.status(200).json({ message: "increment success" });
@@ -172,11 +173,11 @@ const followUser = async (req, res) => {
       });
       const decrementFollowingUser = await User.findOneAndUpdate(
         { _id: userId },
-        { $inc: { following: -1 } }
+        { $inc: { following: -1 } },
       );
       const decrementFollowedUser = await User.findOneAndUpdate(
         { _id: followingId },
-        { $inc: { followers: -1 } }
+        { $inc: { followers: -1 } },
       );
       if (decrementFollowedUser) {
         return res.status(200).json({ message: "decrement success" });
@@ -218,7 +219,7 @@ const commentPost = async (req, res) => {
     if (comment) {
       const incrementCommentCount = await Post.findOneAndUpdate(
         { _id: postId },
-        { $inc: { comments: 1 } }
+        { $inc: { comments: 1 } },
       );
       return res.status(201).json({ message: "Comment Created Successfully" });
     }
@@ -236,13 +237,45 @@ const editUserDetails = async (req, res) => {
   try {
     const editUser = await User.findOneAndUpdate(
       { userName },
-      { fullName, dob, mobile, email, accountType, bioData }
+      { fullName, dob, mobile, email, accountType, bioData },
     );
     if (editUser) return res.status(200);
     return res.status(404);
   } catch (error) {
     console.error("Error occured: ", error);
     return res.status(500).json({ message: error });
+  }
+};
+
+//GET MESSAGES
+const getMessages = async (req, res) => {
+  const { userId, searchUserId } = req.params;
+  try {
+    const msg = await Message.find({
+      senderId: { $in: [userId, searchUserId] },
+      receiverId: { $in: [userId, searchUserId] },
+    });
+    if (msg) return res.status(200).json({ msg });
+    else return res.status(204).json({ message: "No msgs" });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+const storeMessages = async (req, res) => {
+  const { userId, searchUserId } = req.params;
+  const { file, text } = req.body;
+  try {
+    const createMsg = await Message.create({
+      senderId: userId,
+      receiverId: searchUserId,
+      text: text,
+      file: file,
+    });
+    if (createMsg) return res.status(201).json({ message: "message Stored" });
+    else return res.status(404).json({ message: "message Failed to store" });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
   }
 };
 
@@ -267,7 +300,7 @@ const deleteComment = async (req, res) => {
     if (commentDeletion) {
       const decrementCommentCount = await Post.findOneAndUpdate(
         { _id: postId },
-        { $inc: { comments: -1 } }
+        { $inc: { comments: -1 } },
       );
       return res.status(200).json({ message: "Comment Deleted" });
     }
@@ -313,4 +346,6 @@ module.exports = {
   commentPost,
   getComments,
   deleteComment,
+  storeMessages,
+  getMessages,
 };

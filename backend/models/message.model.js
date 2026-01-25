@@ -5,9 +5,9 @@ const messageSchema = new mongoose.Schema(
     senderId: { type: mongoose.Schema.ObjectId, ref: "user" },
     receiverId: { type: mongoose.Schema.ObjectId, ref: "user" },
     text: { type: String },
-    images: { type: String },
+    file: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Message = mongoose.model("message", messageSchema);
