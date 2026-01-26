@@ -19,7 +19,11 @@ app.use(express.json());
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:5173", "http://10.0.70.119:5173"],
+    origin: [
+      "http://localhost:5173",
+      "http://10.0.70.119:5173",
+      "http://10.0.70.86:5173",
+    ],
     methods: ["GET", "POST"],
   },
 });
@@ -28,9 +32,11 @@ app.use("/account", authRouter);
 app.use("/", userRouter);
 
 io.on("connection", (socket) => {
-  socket.on("sendMessage", (formData) => {
-    console.log(formData);
-    io.emit("chatMsg", formData);
+  socket.on("joinId", (chatId) => {
+    socket.join(`${chatId}`);
+    socket.on("sendMessage", (formData) => {
+      io.to(`${chatId}`).emit(`${chatId}`, formData);
+    });
   });
 });
 
