@@ -803,6 +803,25 @@
   border-bottom: 1px inset black;
 }
 
+.messageBtn {
+  position: relative;
+}
+
+.messageBtn[title]:hover::after {
+  opacity: 0.8;
+  transition: 1s all;
+  visibility: visible;
+}
+.messageBtn[title]::after {
+  content: attr(title);
+  background-color: #111;
+  color: white;
+  backdrop-filter: 1px;
+  visibility: hidden;
+  position: absolute;
+  bottom: -3rem;
+}
+
 .chat {
   width: 100%;
   height: 100%;

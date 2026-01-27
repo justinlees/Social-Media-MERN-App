@@ -84,9 +84,22 @@ export default function SearchAccountProfile() {
                       >
                         Follow
                       </button>
-                      <button className="text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer">
-                        <Link to="message">Message</Link>
-                      </button>
+                      {followings.find(
+                        (following) =>
+                          following.userId === userId &&
+                          following.followingId == searchUserId,
+                      ) ? (
+                        <button className="text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer">
+                          <Link to="message">Message</Link>
+                        </button>
+                      ) : (
+                        <button
+                          className="text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-not-allowed messageBtn"
+                          title="follow for messaging"
+                        >
+                          <Link className="cursor-not-allowed">Message</Link>
+                        </button>
+                      )}
                     </div>
                   </section>
                 </div>
