@@ -88,6 +88,11 @@ export default function SearchAccountProfile() {
                         (following) =>
                           following.userId === userId &&
                           following.followingId == searchUserId,
+                      ) ||
+                      followings.find(
+                        (following) =>
+                          following.userId === searchUserId &&
+                          following.followingId == userId,
                       ) ? (
                         <button className="text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer">
                           <Link to="message">Message</Link>

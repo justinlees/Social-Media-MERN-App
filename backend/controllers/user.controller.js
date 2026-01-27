@@ -42,7 +42,7 @@ const searchAccounts = async (req, res) => {
 
 //GET SEARCH ACCOUNT POSTS
 const searchAccountUser = async (req, res) => {
-  const { searchUserId } = req.params;
+  const { userId, searchUserId } = req.params;
   try {
     const searchUserPosts = await Post.find({ userId: searchUserId });
     const searchUser = await User.findOne({ _id: searchUserId }).select(
@@ -52,7 +52,7 @@ const searchAccountUser = async (req, res) => {
       userId: searchUserId,
     });
     const searchUserFollowings = await Following.find({
-      followingId: searchUserId,
+      userId: searchUserId,
     });
     if (searchUserPosts.length || searchUser)
       return res.status(200).json({
@@ -139,7 +139,7 @@ const followUser = async (req, res) => {
 
     const followingExist = await Following.findOne({ userId, followingId });
     if (!followingExist) {
-      const followingUser = await Following.create({
+      const followUser = await Following.create({
         userId,
         followingId,
         followingUsername,
