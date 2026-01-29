@@ -63,19 +63,24 @@ export default function SearchAccountProfile() {
     <div className="userProfilePage">
       {accountInfo && (
         <>
-          <header className="profileHeader bg-gray-200 h-[8rem] md:h-[12rem]">
+          <header className="searchProfileHeader bg-gray-200 h-[8rem] md:h-[12rem]">
             <div className="userInfo">
-              <div className="userImage flex justify-end items-center">
+              <div className="userImage">
                 <img className="w-[6rem] h-[6rem] bg-gray-100 md:w-[8rem] md:h-[8rem]" />
               </div>
               <div className="userDetails">
-                <div className="w-full h-full flex flex-col justify-center items-left md:gap-3">
+                <div className="w-sm">
                   <h1 className="text-md font-bold md:text-4xl md:font-medium ">
                     {accountInfo?.userName} <span>*</span>
                   </h1>
                   <h2 className="text-sm md:text-xl">
                     {accountInfo?.fullName}
                   </h2>
+                </div>
+                <div className="w-full h-full flex flex-col justify-center items-left md:gap-3 border-l">
+                  <p className="h-[50%] w-[50%] overflow-y-scroll">
+                    {accountInfo?.bioData}
+                  </p>
                   <section className="buttonArea">
                     <div>
                       <button
@@ -86,13 +91,10 @@ export default function SearchAccountProfile() {
                       </button>
                       {followings.find(
                         (following) =>
-                          following.userId === userId &&
-                          following.followingId == searchUserId,
-                      ) ||
-                      followings.find(
-                        (following) =>
-                          following.userId === searchUserId &&
-                          following.followingId == userId,
+                          (following.userId === userId ||
+                            following.userId === searchUserId) &&
+                          (following.followingId == searchUserId ||
+                            following.followingId === userId),
                       ) ? (
                         <button className="text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer">
                           <Link to="message">Message</Link>

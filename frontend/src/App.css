@@ -355,6 +355,84 @@
   height: 100%;
 }
 
+/* SearchAccount UserProfile */
+.searchProfileHeader {
+  width: 100%;
+  /* height: 8rem; */
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid gray;
+}
+
+.userProfilePage .searchProfileHeader .userInfo {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userProfilePage .searchProfileHeader .userInfo .userImage {
+  width: 12rem;
+  height: 100%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.userProfilePage .searchProfileHeader .userInfo img {
+  border: 1px solid black;
+  border-radius: 50%;
+  /* margin: 0 2rem; */
+}
+
+.userProfilePage .searchProfileHeader .userDetails {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userProfilePage .searchProfileHeader .userDetails .userName {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+}
+
+.userProfilePage .searchProfileHeader .userDetails .buttonArea {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userProfilePage .searchProfileHeader .userDetails .buttonArea div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.userProfilePage .searchProfileHeader .userDetails .buttonArea div button {
+  padding: 0.4rem 0;
+  margin: 0 0.5rem;
+}
+
+.userProfilePage .searchProfileHeader .userDetails ul {
+  list-style-type: none;
+  width: 100%;
+  height: 100%;
+}
+
+.userProfilePage .searchProfileHeader .userDetails ul li {
+  width: 100%;
+  height: 100%;
+}
+
 /* PostCreation */
 .postCreationPage {
   width: 100%;
