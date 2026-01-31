@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+const upload = require("../middleware/multer.js");
 const {
   getUserDetails,
   searchAccounts,
@@ -28,7 +28,11 @@ router.get("/:userId/homePage/:searchUserId", searchAccountUser);
 router.get("/:userId/homePage/:searchUserId/message", getMessages);
 
 router.post("/:userId/following/:searchUserId", followUser);
-router.post("/:userId/homePage/userProfile/postCreation", userPostCreation);
+router.post(
+  "/:userId/homePage/userProfile/postCreation",
+  upload.single("postImage"),
+  userPostCreation,
+);
 router.post("/:userId/homePage/userProfile/likePost", incrementPostLike);
 router.post("/:userId/homePage/:postId/commentPost", commentPost);
 router.post("/:userId/homePage/:searchUserId/message", storeMessages);

@@ -28,7 +28,7 @@ export default function Post({ posts, user }) {
             "Content-type": "application/json",
           },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -82,7 +82,12 @@ export default function Post({ posts, user }) {
             )}
           </div>
           <div className="cardPost">
-            <img src="https://static.skillshare.com/uploads/discussion/tmp/cbe48544.jpg" />
+            <img
+              src={
+                post?.postImage ||
+                `https://static.skillshare.com/uploads/discussion/tmp/cbe48544.jpg`
+              }
+            />
           </div>
           <div className="postCaption">
             <div className="cardReview">

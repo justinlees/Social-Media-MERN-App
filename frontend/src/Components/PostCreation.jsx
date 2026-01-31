@@ -3,14 +3,16 @@ import { useParams } from "react-router-dom";
 
 export default function PostCreation({ setOpenPost, postUserName }) {
   const params = useParams();
+  const [docFile, setDocFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = {
-      userId: params.userId,
-      userName: postUserName,
-      postImage: e.target.postImage.value,
-      postCaption: e.target.postCaption.value,
-    };
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("userId", params.userId);
+    formData.append("userName", postUserName);
+    formData.append("postImage", docFile);
+    formData.append("postCaption", e.target.postCaption.value);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BASE_URL}/${
@@ -18,13 +20,9 @@ export default function PostCreation({ setOpenPost, postUserName }) {
         }/homePage/userProfile/postCreation`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
+          body: formData,
+        },
       );
-
       if (response.status === 201) {
         window.location.reload();
       }
@@ -45,12 +43,24 @@ export default function PostCreation({ setOpenPost, postUserName }) {
             <span className="material-symbols-outlined">close</span>
           </button>
         </header>
-        <form method="POST" onSubmit={handleSubmit}>
+        <form
+          method="POST"
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+        >
           <div className="imageSelection">
             <label className="positiveBtn">
               Add Image
               <span className="material-symbols-outlined">upload</span>
-              <input type="file" name="postImage" required />
+              <input
+                type="file"
+                name="postImage"
+                required
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setDocFile(file);
+                }}
+              />
             </label>
           </div>
           {/* <div className="postPreview">
@@ -66,7 +76,7 @@ export default function PostCreation({ setOpenPost, postUserName }) {
           </div>
           <div className="buttonsArea">
             <button type="submit" className="positiveBtn">
-              Post
+              {loading ? <span className="loader"></span> : "Post"}
             </button>
             <button type="reset" className="bg-black text-white font-bold">
               Clear

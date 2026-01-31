@@ -4,6 +4,7 @@ const Comment = require("../models/postComments.model.js");
 const Following = require("../models/following.model.js");
 const Followers = require("../models/followers.model.js");
 const Message = require("../models/message.model.js");
+const cloudinary = require("../lib/cloudinarySetup.js");
 
 // GET USER DETAILS
 const getUserDetails = async (req, res) => {
@@ -81,11 +82,22 @@ const getUserPosts = async (req, res) => {
 // CREATING USER'S POST
 const userPostCreation = async (req, res) => {
   const { userId } = req.params;
-  const { postImage, postCaption, userName } = req.body;
+  const { postCaption, userName } = req.body;
+  const postImage = req.file.path;
   try {
+    const options = {
+      use_filename: true,
+      unique_filename: false,
+      overwrite: true,
+      resource_type: "auto",
+      asset_folder: "socialMediaPosts",
+    };
+
+    const result = await cloudinary.uploader.upload(postImage, options);
+
     const createPost = await Post.create({
       userId,
-      postImage,
+      postImage: result.secure_url,
       postCaption,
       userName,
     });
