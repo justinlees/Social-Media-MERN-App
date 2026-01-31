@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 import Post from "./post/Post.jsx";
-import Message from "./Message.jsx";
+
 export default function SearchAccountProfile() {
   const [accountInfo, setAccountInfo] = useState();
   const { userId, searchUserId } = useParams();
@@ -83,12 +83,26 @@ export default function SearchAccountProfile() {
                   </p>
                   <section className="buttonArea">
                     <div>
-                      <button
-                        className="positiveBtn text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer"
-                        onClick={() => handleFollow(accountInfo?.userName)}
-                      >
-                        Follow
-                      </button>
+                      {followers.find(
+                        (follower) =>
+                          follower.userId === searchUserId &&
+                          follower.followerId === userId,
+                      ) ? (
+                        <button
+                          className="text-sm font-bold bg-red-400 text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer"
+                          onClick={() => handleFollow(accountInfo?.userName)}
+                        >
+                          UnFollow
+                        </button>
+                      ) : (
+                        <button
+                          className="positiveBtn text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer"
+                          onClick={() => handleFollow(accountInfo?.userName)}
+                        >
+                          Follow
+                        </button>
+                      )}
+
                       {followings.find(
                         (following) =>
                           (following.userId === userId &&
