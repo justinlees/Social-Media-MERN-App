@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 import Post from "./post/Post.jsx";
+import socket from "../lib/SocketInstance.jsx";
 
 export default function SearchAccountProfile() {
   const [accountInfo, setAccountInfo] = useState();
@@ -10,31 +11,21 @@ export default function SearchAccountProfile() {
   const [followings, setFollowings] = useState([]);
   const [openFollowers, setOpenFollowers] = useState(false);
   const [openFollowing, setOpenFollowing] = useState(false);
+  const [followRequest, setFollowRequest] = useState([]);
+  const followRequestId =
+    params.userId > accountInfo._id
+      ? `${params.userId}-${accountInfo._id}`
+      : `${accountInfo._id}-${params.userId}`;
 
-  const handleFollow = async (followingUsername) => {
-    const followData = {
-      userId: userId,
-      followingId: searchUserId,
-      followingUsername: followingUsername,
-    };
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${userId}/following/${searchUserId}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(followData),
-        },
-      );
+  useEffect(() => {
+    socket.on("requestFollow", (requestData) => {
+      setFollowRequest((prev) => [...prev, requestData]);
+    });
+  }, []);
 
-      if (response.status === 200) {
-        console.log("Request Done");
-        window.location.reload();
-      }
-    } catch (error) {
-      console.log("Error in sending following request", error);
-    }
-  };
+  useEffect(() => {
+    socket.emit("followRequestId", followRequestId);
+  }, [followRequestId]);
 
   useEffect(() => {
     const fetchSearchUser = async () => {
@@ -59,6 +50,46 @@ export default function SearchAccountProfile() {
     };
     fetchSearchUser();
   }, [searchUserId, userId]);
+
+  const handleFollow = async (followingUsername) => {
+    const followData = {
+      userId: userId,
+      followingId: searchUserId,
+      followingUsername: followingUsername,
+    };
+
+    try {
+      if (accountInfo?.accountType === "public") {
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/${userId}/following/${searchUserId}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(followData),
+          },
+        );
+        if (response.status === 200) {
+          console.log("Request Done");
+          window.location.reload();
+        }
+      } else {
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/${userId}/followRequest/${searchUserId}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(followData),
+          },
+        );
+        if (response.status === 201) {
+          socket.emit("requestFollow", followData);
+        }
+      }
+    } catch (error) {
+      console.log("Error in sending following request", error);
+    }
+  };
+
   return (
     <div className="userProfilePage">
       {accountInfo && (

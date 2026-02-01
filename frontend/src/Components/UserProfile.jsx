@@ -14,7 +14,7 @@ export default function UserProfile() {
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL}/${
             params.userId
-          }/homePage/userProfile`
+          }/homePage/userProfile`,
         );
 
         if (response.status === 200) {
@@ -55,7 +55,7 @@ export default function UserProfile() {
                     Create Post
                   </button>
                   <button className="text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer">
-                    Message
+                    Notifications
                   </button>
                 </div>
               </section>

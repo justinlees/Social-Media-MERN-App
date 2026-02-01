@@ -38,6 +38,13 @@ io.on("connection", (socket) => {
       io.to(`${chatId}`).emit(`${chatId}`, formData);
     });
   });
+
+  socket.on("followRequestId", (followRequestId) => {
+    socket.join(`${followRequestId}`);
+    socket.on("requestFollow", (followData) => {
+      io.to(`${followRequestId}`).emit("requestFollow", followData);
+    });
+  });
 });
 
 connectDB().then(() => {

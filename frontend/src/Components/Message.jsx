@@ -1,20 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useOutletContext, useParams } from "react-router-dom";
-import { io } from "socket.io-client";
+import socket from "../lib/SocketInstance";
 
 export default function Message() {
   const { accountInfo } = useOutletContext();
   const [message, setMessage] = useState([]);
   const params = useParams();
-  const socket = useRef(null);
   const chatId =
     params.userId > accountInfo._id
       ? `${params.userId}-${accountInfo._id}`
       : `${accountInfo._id}-${params.userId}`;
-  useEffect(() => {
-    socket.current = io(import.meta.env.VITE_BASE_URL);
-    return () => socket.current.disconnect();
-  }, []);
 
   useEffect(() => {
     const handleMessage = (msg) => {
@@ -25,7 +20,7 @@ export default function Message() {
   }, [chatId]);
 
   useEffect(() => {
-    socket.current.emit("joinId", chatId);
+    socket.emit("joinId", chatId);
   }, [chatId]);
 
   useEffect(() => {
@@ -84,8 +79,8 @@ export default function Message() {
         <Link to="..">X</Link>
       </section>
       <div className="chat">
-        {message?.map((msg) => (
-          <p>{msg?.text}</p>
+        {message?.map((msg, i) => (
+          <p key={i}>{msg?.text}</p>
         ))}
       </div>
       <form
