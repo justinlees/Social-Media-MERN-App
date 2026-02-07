@@ -12,16 +12,12 @@ export default function SearchAccountProfile() {
   const [openFollowers, setOpenFollowers] = useState(false);
   const [openFollowing, setOpenFollowing] = useState(false);
   const [followRequest, setFollowRequest] = useState([]);
-  const followRequestId =
-    params.userId > accountInfo._id
-      ? `${params.userId}-${accountInfo._id}`
-      : `${accountInfo._id}-${params.userId}`;
-
+  const followRequestId = searchUserId;
   useEffect(() => {
-    socket.on("requestFollow", (requestData) => {
+    socket.on(`${userId}`, (requestData) => {
       setFollowRequest((prev) => [...prev, requestData]);
     });
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     socket.emit("followRequestId", followRequestId);
@@ -82,7 +78,10 @@ export default function SearchAccountProfile() {
           },
         );
         if (response.status === 201) {
-          socket.emit("requestFollow", followData);
+          socket.emit("requestFollow", {
+            followData,
+            msg: "Requested to Follow",
+          });
         }
       }
     } catch (error) {

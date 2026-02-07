@@ -33,7 +33,7 @@ export default function PostCreation({ setOpenPost, postUserName }) {
 
   return (
     <div className="postCreationPage">
-      <div className="postCreationCard w-sm h-[70%] rounded-md shadow-md border-1 border-gray-300 md:w-lg md:h-[70%] ">
+      <div className="postCreationCard w-sm h-[70%] rounded-md shadow-md border-1 border-gray-300 md:w-lg md:h-[70%] z-10 ">
         <header>
           <button
             onClick={() => {

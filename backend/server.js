@@ -23,6 +23,7 @@ const io = new Server(httpServer, {
       "http://localhost:5173",
       "http://10.0.70.119:5173",
       "http://10.0.70.86:5173",
+      "http://10.0.70.108:5173",
     ],
     methods: ["GET", "POST"],
   },
@@ -42,7 +43,7 @@ io.on("connection", (socket) => {
   socket.on("followRequestId", (followRequestId) => {
     socket.join(`${followRequestId}`);
     socket.on("requestFollow", (followData) => {
-      io.to(`${followRequestId}`).emit("requestFollow", followData);
+      io.to(`${followRequestId}`).emit(`${followRequestId}`, followData);
     });
   });
 });
