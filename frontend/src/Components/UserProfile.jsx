@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useOutletContext, useParams, Link, Outlet } from "react-router-dom";
+import { useOutletContext, useParams, Link } from "react-router-dom";
 import PostCreation from "./PostCreation.jsx";
 import Post from "./post/Post.jsx";
 
@@ -78,19 +78,17 @@ export default function UserProfile() {
         </div>
       </header>
       <div className="userPosts">
-        {/* {userPosts.length ? (
+        {userPosts.length ? (
           <Post posts={userPosts} user={user} />
         ) : (
           <h1>No posts.Click Create Post</h1>
         )}
-         */}
         {openPost && (
           <PostCreation
             setOpenPost={setOpenPost}
             postUserName={user?.userName}
           />
         )}
-        <Outlet context={{ userPosts, user }} />
       </div>
     </div>
   );

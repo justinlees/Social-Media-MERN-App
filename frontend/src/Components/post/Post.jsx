@@ -4,16 +4,13 @@ import SelfPostOptions from "./SelfPostOptions";
 import OthersPostOptions from "./OthersPostOptions";
 import PostComments from "./PostComments";
 
-export default function Post() {
+export default function Post({ posts, user }) {
   const [selfUser, setSelfUser] = useState(false);
   const [getPostId, setGetPostId] = useState();
   const [otherUser, setOtherUser] = useState(false);
   const [openComments, setOpenComments] = useState(false);
   const [isValidLike, setIsValidLike] = useState(false);
   const params = useParams();
-  const context = useOutletContext();
-  const posts = context.userPosts;
-  const user = context.user;
 
   const handleSubmit = async (postId) => {
     const formData = {
@@ -41,7 +38,6 @@ export default function Post() {
       console.error("Server Error", error);
     }
   };
-  if (!posts.length) return <h1>No posts.Click Create Post</h1>;
   return (
     <>
       {posts?.map((post) => (
