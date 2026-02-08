@@ -28,9 +28,11 @@ function App() {
             <Route path=":searchUserId" element={<SearchAccountProfile />}>
               <Route path="message" element={<Message />} />
             </Route>
-            <Route path="userProfile" element={<UserProfile />}>
-              <Route path="notifications" element={<Notifications />} />
-            </Route>
+            <Route path="userProfile" element={<UserProfile />} />
+            <Route
+              path="userProfile/notifications"
+              element={<Notifications />}
+            />
             <Route path="userSettings" element={<UserSettings />}>
               <Route index="true" element={<SettingsOptions />} />
               <Route path="accountDeletion" element={<AccountDeletion />} />

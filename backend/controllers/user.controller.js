@@ -5,6 +5,7 @@ const Following = require("../models/following.model.js");
 const Followers = require("../models/followers.model.js");
 const Message = require("../models/message.model.js");
 const cloudinary = require("../lib/cloudinarySetup.js");
+const FollowRequest = require("../models/followRequest.model.js");
 
 // GET USER DETAILS
 const getUserDetails = async (req, res) => {
@@ -79,6 +80,18 @@ const getUserPosts = async (req, res) => {
   }
 };
 
+//GET USER NOTIFICATIONS
+const getNotifications = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const getRequests = await FollowRequest.find({ followingId: userId });
+    return res.status(200).json({ getRequests });
+  } catch (error) {
+    console.log("Error Occured", error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
 // CREATING USER'S POST
 const userPostCreation = async (req, res) => {
   const { userId } = req.params;
@@ -145,7 +158,7 @@ const incrementPostLike = async (req, res) => {
 
 //FOLLOWING A USER
 const followUser = async (req, res) => {
-  const { userId, followingId, followingUsername } = req.body;
+  const { userId, userName, followingId, followingUsername } = req.body;
   try {
     const getUserName = await User.findOne({ _id: userId });
 
@@ -153,11 +166,13 @@ const followUser = async (req, res) => {
     if (!followingExist) {
       const followUser = await Following.create({
         userId,
+        userName,
         followingId,
         followingUsername,
       });
       const followedUser = await Followers.create({
         userId: followingId,
+        userName: followingUsername,
         followerId: userId,
         followerUsername: getUserName.userName,
       });
@@ -169,17 +184,25 @@ const followUser = async (req, res) => {
         { _id: followingId },
         { $inc: { followers: 1 } },
       );
-      if (incrementFollowedUser) {
-        return res.status(200).json({ message: "increment success" });
+      const removeFollowRequest = await FollowRequest.deleteOne({
+        userId,
+        userName,
+        followingId,
+        followingUsername,
+      });
+      if (removeFollowRequest) {
+        return res.status(200).json({ message: "following success" });
       }
     } else {
       const followingUser = await Following.deleteOne({
         userId,
+        userName,
         followingId,
         followingUsername,
       });
       const followedUser = await Followers.deleteOne({
         userId: followingId,
+        userName: followingUsername,
         followerId: userId,
         followerUsername: getUserName.userName,
       });
@@ -197,6 +220,23 @@ const followUser = async (req, res) => {
     }
   } catch (error) {
     return res.status(500).json({ message: "Server Error", error });
+  }
+};
+
+//FollowRequest
+const followRequest = async (req, res) => {
+  const { userId, userName, followingId, followingUsername } = req.body;
+  try {
+    const createFollowRequest = await FollowRequest.create({
+      userId,
+      userName,
+      followingId,
+      followingUsername,
+    });
+    return res.status(201).json({ message: "created request" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -274,6 +314,7 @@ const getMessages = async (req, res) => {
   }
 };
 
+//STORE MESSAGES
 const storeMessages = async (req, res) => {
   const { userId, searchUserId } = req.params;
   const { file, text } = req.body;
@@ -348,6 +389,7 @@ module.exports = {
   searchAccounts,
   searchAccountUser,
   getUserPosts,
+  getNotifications,
   userPostCreation,
   incrementPostLike,
   followUser,
@@ -355,6 +397,7 @@ module.exports = {
   postDeletion,
   userAccountDeletion,
   editUserDetails,
+  followRequest,
   commentPost,
   getComments,
   deleteComment,

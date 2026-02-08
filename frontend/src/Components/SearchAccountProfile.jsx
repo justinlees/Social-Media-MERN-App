@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useParams, useOutletContext } from "react-router-dom";
 import Post from "./post/Post.jsx";
 import socket from "../lib/SocketInstance.jsx";
 
@@ -12,6 +12,7 @@ export default function SearchAccountProfile() {
   const [openFollowers, setOpenFollowers] = useState(false);
   const [openFollowing, setOpenFollowing] = useState(false);
   const [followRequest, setFollowRequest] = useState([]);
+  const user = useOutletContext();
   const followRequestId = searchUserId;
   useEffect(() => {
     socket.on(`${userId}`, (requestData) => {
@@ -50,6 +51,7 @@ export default function SearchAccountProfile() {
   const handleFollow = async (followingUsername) => {
     const followData = {
       userId: userId,
+      userName: user.userName,
       followingId: searchUserId,
       followingUsername: followingUsername,
     };
@@ -89,6 +91,31 @@ export default function SearchAccountProfile() {
     }
   };
 
+  const handleUnFollow = async (followingUsername) => {
+    const followData = {
+      userId: userId,
+      userName: user.userName,
+      followingId: searchUserId,
+      followingUsername: followingUsername,
+    };
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/${userId}/following/${searchUserId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(followData),
+        },
+      );
+      if (response.status === 200) {
+        console.log("Request Done");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log("Error in sending following request", error);
+    }
+  };
+
   return (
     <div className="userProfilePage">
       {accountInfo && (
@@ -120,7 +147,7 @@ export default function SearchAccountProfile() {
                       ) ? (
                         <button
                           className="text-sm font-bold bg-red-400 text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer"
-                          onClick={() => handleFollow(accountInfo?.userName)}
+                          onClick={() => handleUnFollow(accountInfo?.userName)}
                         >
                           UnFollow
                         </button>

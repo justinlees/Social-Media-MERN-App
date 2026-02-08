@@ -12,15 +12,15 @@ export default function Message() {
       : `${accountInfo._id}-${params.userId}`;
 
   useEffect(() => {
-    const handleMessage = (msg) => {
-      setMessage((prev) => [...prev, msg]);
-    };
-    socket.current.on(`${chatId}`, handleMessage);
-    return () => socket.current.off(`${chatId}`, handleMessage);
+    socket.emit("joinId", chatId);
   }, [chatId]);
 
   useEffect(() => {
-    socket.emit("joinId", chatId);
+    const handleMessage = (msg) => {
+      setMessage((prev) => [...prev, msg]);
+    };
+    socket.on("chatMsg", handleMessage);
+    return () => socket.off("chatMsg", handleMessage);
   }, [chatId]);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function Message() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      file: e.target.fileInput.value,
+      file: e.target.fileInput.files[0],
       text: e.target.messageEntry.value,
     };
     try {
@@ -62,7 +62,7 @@ export default function Message() {
         },
       );
       if (response.status === 201) {
-        socket.current.emit("sendMessage", formData);
+        socket.emit("sendMessage", { formData, chatId });
         e.target.reset();
       } else {
         alert("Message Not Sent");

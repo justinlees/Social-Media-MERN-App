@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import socket from "../lib/SocketInstance";
 
 export default function Notifications() {
@@ -20,7 +20,8 @@ export default function Notifications() {
         );
         if (response.status === 200) {
           const data = await response.json();
-          setNotifications(data);
+          console.log(data.getRequests);
+          setNotifications(data.getRequests);
         }
       } catch (error) {
         console.log("Error in requesting API", error);
@@ -28,9 +29,51 @@ export default function Notifications() {
     };
     fetchNotifications();
   }, [userId]);
+
+  const acceptRequest = async (followData) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/${userId}/following/${followData.userId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(followData),
+        },
+      );
+      if (response.status === 200) {
+        console.log("Request Done");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log("Error in sending following request", error);
+    }
+  };
+
   return (
-    <div>
-      <p>Notification</p>
+    <div className="userProfilePage">
+      <h1>Notifications</h1>
+      {notifications?.map((notification) => (
+        <div key={notification?._id}>
+          <p>
+            <span className="font-bold">
+              <Link to={`../${notification?.userId}`}>
+                {notification?.userName}
+              </Link>
+            </span>{" "}
+            requested to follow you
+          </p>
+          <button
+            className="border border-black"
+            onClick={() => {
+              acceptRequest(notification);
+            }}
+          >
+            Accept
+          </button>
+          <p>or</p>
+          <button>Reject</button>
+        </div>
+      ))}
     </div>
   );
 }

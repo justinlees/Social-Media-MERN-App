@@ -5,12 +5,14 @@ const {
   searchAccounts,
   searchAccountUser,
   getUserPosts,
+  getNotifications,
   userPostCreation,
   incrementPostLike,
   getAllPosts,
   postDeletion,
   userAccountDeletion,
   editUserDetails,
+  followRequest,
   commentPost,
   getComments,
   deleteComment,
@@ -26,8 +28,10 @@ router.get("/:userId/homePage/:postId/getComments", getComments);
 router.get("/:userId/homePage/search", searchAccounts);
 router.get("/:userId/homePage/:searchUserId", searchAccountUser);
 router.get("/:userId/homePage/:searchUserId/message", getMessages);
+router.get("/:userId/homePage/userProfile/notifications", getNotifications);
 
 router.post("/:userId/following/:searchUserId", followUser);
+router.post("/:userId/followRequest/:searchUserId", followRequest);
 router.post(
   "/:userId/homePage/userProfile/postCreation",
   upload.single("postImage"),
