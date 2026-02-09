@@ -3,13 +3,14 @@ import { Link, useOutletContext, useParams } from "react-router-dom";
 import socket from "../lib/SocketInstance";
 
 export default function Message() {
-  const { accountInfo } = useOutletContext();
+  const { accountInfo, followers, followings } = useOutletContext();
   const [message, setMessage] = useState([]);
-  const params = useParams();
+  const [follow, setFollow] = useState();
+  const { userId } = useParams();
   const chatId =
-    params.userId > accountInfo._id
-      ? `${params.userId}-${accountInfo._id}`
-      : `${accountInfo._id}-${params.userId}`;
+    userId > accountInfo._id
+      ? `${userId}-${accountInfo._id}`
+      : `${accountInfo._id}-${userId}`;
 
   useEffect(() => {
     socket.emit("joinId", chatId);
@@ -27,7 +28,7 @@ export default function Message() {
     const fetchMessages = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${params.userId}/homePage/${accountInfo._id}/message`,
+          `${import.meta.env.VITE_BASE_URL}/${userId}/homePage/${accountInfo._id}/message`,
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -44,17 +45,17 @@ export default function Message() {
       }
     };
     fetchMessages();
-  }, [params.userId, accountInfo._id]);
+  }, [userId, accountInfo._id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      file: e.target.fileInput.files[0],
+      file: e.target.fileInput.value,
       text: e.target.messageEntry.value,
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${params.userId}/homePage/${accountInfo._id}/message`,
+        `${import.meta.env.VITE_BASE_URL}/${userId}/homePage/${accountInfo._id}/message`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -72,6 +73,25 @@ export default function Message() {
     }
   };
 
+  const handleNavigate = () => {
+    window.location = "..";
+  };
+
+  const allowed =
+    followings.find(
+      (following) =>
+        (following.userId === userId &&
+          following.followingId === accountInfo._id) ||
+        (following.userId === accountInfo._id &&
+          following.followingId === userId),
+    ) ||
+    followers.find(
+      (follower) =>
+        (follower.userId === accountInfo._id &&
+          follower.followerId === userId) ||
+        (follower.userId === userId && follower.followerId === accountInfo._id),
+    );
+  if (!allowed) return handleNavigate();
   return (
     <div className="w-full h-full md:w-md md:h-[60%] bg-yellow-200 flex flex-col absolute bottom-0">
       <section className="w-full bg-yellow-300 flex justify-between">
