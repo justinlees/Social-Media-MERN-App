@@ -5,10 +5,14 @@ import socket from "../lib/SocketInstance";
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const { userId } = useParams();
+
   useEffect(() => {
-    socket.on(`${userId}`, (notifyData) => {
+    const handleNotify = (notifyData) => {
       setNotifications((prev) => [...prev, notifyData]);
-    });
+    };
+    socket.on("listenNotification", handleNotify);
+
+    return () => socket.off("listenNotification", handleNotify);
   }, [userId]);
 
   useEffect(() => {
@@ -42,7 +46,7 @@ export default function Notifications() {
       );
       if (response.status === 200) {
         console.log("Request Done");
-        window.location.reload();
+        socket.emit("sendRequestResponse", followData);
       }
     } catch (error) {
       console.log("Error in sending following request", error);
@@ -53,7 +57,7 @@ export default function Notifications() {
     <div className="userProfilePage">
       <h1>Notifications</h1>
       {notifications?.map((notification) => (
-        <div key={notification?._id}>
+        <div key={`${notification?.userId}-${notification?.followingId}`}>
           <p>
             <span className="font-bold">
               <Link to={`../${notification?.userId}`}>

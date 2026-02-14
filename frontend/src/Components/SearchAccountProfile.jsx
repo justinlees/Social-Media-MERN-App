@@ -13,16 +13,31 @@ export default function SearchAccountProfile() {
   const [openFollowing, setOpenFollowing] = useState(false);
   const [followRequest, setFollowRequest] = useState([]);
   const user = useOutletContext();
-  const followRequestId = searchUserId;
-  useEffect(() => {
-    socket.on(`${userId}`, (requestData) => {
-      setFollowRequest((prev) => [...prev, requestData]);
-    });
-  }, [userId]);
+  const followRequestId =
+    userId > searchUserId
+      ? `${userId}-${searchUserId}`
+      : `${searchUserId}-${userId}`;
 
   useEffect(() => {
     socket.emit("followRequestId", followRequestId);
   }, [followRequestId]);
+
+  useEffect(() => {
+    const handleRequestResponses = (requestData) => {
+      // setFollowings((prev) => [...prev, requestData]);
+      const followerData = {
+        userId: requestData.followingId,
+        userName: requestData.followingUsername,
+        followerId: requestData.userId,
+        followerUsername: requestData.userName,
+      };
+      setFollowers((prev) => [...prev, followerData]);
+    };
+    socket.on("listenNotificationResponse", handleRequestResponses);
+    return () => {
+      socket.off("listenNotificationResponse", handleRequestResponses);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchSearchUser = async () => {
@@ -80,10 +95,8 @@ export default function SearchAccountProfile() {
           },
         );
         if (response.status === 201) {
-          socket.emit("requestFollow", {
-            followData,
-            msg: "Requested to Follow",
-          });
+          socket.emit("requestFollow", followData);
+          console.log("socket sent");
         }
       }
     } catch (error) {
@@ -199,7 +212,7 @@ export default function SearchAccountProfile() {
                     }}
                   >
                     <span className="font-bold text-md md:text-xl">
-                      {accountInfo?.followers}
+                      {followers.length}
                     </span>
                     Followers
                   </li>
@@ -213,7 +226,7 @@ export default function SearchAccountProfile() {
                     }}
                   >
                     <span className="font-bold text-md md:text-xl">
-                      {accountInfo?.following}
+                      {followings.length}
                     </span>
                     Following
                   </li>

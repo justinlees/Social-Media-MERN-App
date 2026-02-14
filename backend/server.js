@@ -42,14 +42,25 @@ io.on("connection", (socket) => {
     io.to(`${chatId}`).emit("chatMsg", formData);
   });
 
-  // socket.on("followRequestId", (followRequestId) => {
-  //   console.log(followRequestId);
-  //   socket.join(`${followRequestId}`);
-  //   socket.on("requestFollow", (followData) => {
-  //     console.log(followData);
-  //     io.to(`${followRequestId}`).emit(`${followData.userId}`, followData);
-  //   });
-  // });
+  socket.on("notifyJoin", (userId) => {
+    console.log(userId);
+    socket.join(userId);
+  });
+  socket.on("requestFollow", (followData) => {
+    io.to(`${followData.followingId}`).emit("listenNotification", followData);
+  });
+
+  socket.on("followRequestId", (followRequestId) => {
+    socket.join(followRequestId);
+  });
+
+  socket.on("sendRequestResponse", (followData) => {
+    const requestId =
+      followData.userId > followData.followingId
+        ? `${followData.userId}-${followData.followingId}`
+        : `${followData.followingId}-${followData.userId}`;
+    io.to(requestId).emit("listenNotificationResponse", followData);
+  });
 });
 
 connectDB().then(() => {

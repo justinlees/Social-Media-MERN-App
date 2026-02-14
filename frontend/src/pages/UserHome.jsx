@@ -1,16 +1,22 @@
 import { useState, useEffect } from "react";
 import { NavLink, Outlet, useParams } from "react-router-dom";
+import socket from "../lib/SocketInstance";
 
 export default function UserHome() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const params = useParams();
+
+  useEffect(() => {
+    socket.emit("notifyJoin", params.userId);
+  }, [params.userId]);
+
   useEffect(() => {
     try {
       const fetchData = async () => {
         setLoading(true);
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${params.userId}/homePage`
+          `${import.meta.env.VITE_BASE_URL}/${params.userId}/homePage`,
         );
         const data = await response.json();
         if (response.status === 200) {
@@ -24,7 +30,7 @@ export default function UserHome() {
     } catch (error) {
       consol.error("Error Occured", error);
     }
-  }, [params.userID]);
+  }, [params.userId]);
 
   if (loading)
     return (
