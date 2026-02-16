@@ -22,13 +22,14 @@ export default function SignUp() {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify(formData),
-        }
+        },
       );
       setLoading(false);
       if (response.status === 201) {
         const data = await response.json();
-        window.location = `/${data.user._id}/homePage`;
+        window.location = `/homePage`;
       } else {
         console.log("Error in Creating user");
       }

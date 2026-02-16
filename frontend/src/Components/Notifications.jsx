@@ -19,8 +19,12 @@ export default function Notifications() {
     const fetchNotifications = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${userId}/homePage/userProfile/notifications`,
-          { method: "GET", headers: { "Content-Type": "application/json" } },
+          `${import.meta.env.VITE_BASE_URL}/homePage/userProfile/notifications`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          },
         );
         if (response.status === 200) {
           const data = await response.json();
@@ -32,15 +36,16 @@ export default function Notifications() {
       }
     };
     fetchNotifications();
-  }, [userId]);
+  }, []);
 
   const acceptRequest = async (followData) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${userId}/following/${followData.userId}`,
+        `${import.meta.env.VITE_BASE_URL}/following/${followData.userId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(followData),
         },
       );

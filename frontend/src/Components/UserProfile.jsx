@@ -12,9 +12,12 @@ export default function UserProfile() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${
-            params.userId
-          }/homePage/userProfile`,
+          `${import.meta.env.VITE_BASE_URL}/homePage/userProfile`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "apllication/json" },
+            credentials: "include",
+          },
         );
 
         if (response.status === 200) {
@@ -30,7 +33,7 @@ export default function UserProfile() {
       }
     };
     fetchData();
-  }, [params.userId]);
+  }, []);
   return (
     <div className="userProfilePage">
       <header className="profileHeader bg-gray-200 h-[8rem] md:h-[12rem]">
@@ -79,13 +82,14 @@ export default function UserProfile() {
       </header>
       <div className="userPosts">
         {userPosts.length ? (
-          <Post posts={userPosts} user={user} />
+          <Post posts={userPosts} setUserPosts={setUserPosts} user={user} />
         ) : (
           <h1>No posts.Click Create Post</h1>
         )}
         {openPost && (
           <PostCreation
             setOpenPost={setOpenPost}
+            setUserPosts={setUserPosts}
             postUserName={user?.userName}
           />
         )}

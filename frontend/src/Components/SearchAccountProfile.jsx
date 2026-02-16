@@ -43,10 +43,11 @@ export default function SearchAccountProfile() {
     const fetchSearchUser = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${userId}/homePage/${searchUserId}`,
+          `${import.meta.env.VITE_BASE_URL}/homePage/${searchUserId}`,
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
           },
         );
         const data = await response.json();
@@ -61,7 +62,7 @@ export default function SearchAccountProfile() {
       }
     };
     fetchSearchUser();
-  }, [searchUserId, userId]);
+  }, [searchUserId]);
 
   const handleFollow = async (followingUsername) => {
     const followData = {
@@ -74,10 +75,11 @@ export default function SearchAccountProfile() {
     try {
       if (accountInfo?.accountType === "public") {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${userId}/following/${searchUserId}`,
+          `${import.meta.env.VITE_BASE_URL}/following/${searchUserId}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify(followData),
           },
         );
@@ -87,10 +89,11 @@ export default function SearchAccountProfile() {
         }
       } else {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${userId}/followRequest/${searchUserId}`,
+          `${import.meta.env.VITE_BASE_URL}/followRequest/${searchUserId}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify(followData),
           },
         );
@@ -113,10 +116,11 @@ export default function SearchAccountProfile() {
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${userId}/following/${searchUserId}`,
+        `${import.meta.env.VITE_BASE_URL}/following/${searchUserId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(followData),
         },
       );
@@ -221,8 +225,6 @@ export default function SearchAccountProfile() {
                     onClick={() => {
                       setOpenFollowers(false);
                       setOpenFollowing(true);
-                      console.log(followings);
-                      console.log("Clicked Followings");
                     }}
                   >
                     <span className="font-bold text-md md:text-xl">

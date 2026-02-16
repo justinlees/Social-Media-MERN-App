@@ -11,10 +11,12 @@ export default function PostComments({ postId, user, setOpenComments }) {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${
-            params.userId
-          }/homePage/${postId}/getComments`,
-          { method: "GET", headers: { "Content-Type": "application/json" } }
+          `${import.meta.env.VITE_BASE_URL}/homePage/${postId}/getComments`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          },
         );
 
         if (response.status === 200) {
@@ -26,7 +28,7 @@ export default function PostComments({ postId, user, setOpenComments }) {
       }
     };
     fetchData();
-  }, [params.userId, postId]);
+  }, [postId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,16 +40,15 @@ export default function PostComments({ postId, user, setOpenComments }) {
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${
-          params.userId
-        }/homePage/${postId}/commentPost`,
+        `${import.meta.env.VITE_BASE_URL}/homePage/${postId}/commentPost`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify(formData),
-        }
+        },
       );
       setLoading(false);
       if (response.status === 201) {
@@ -67,14 +68,13 @@ export default function PostComments({ postId, user, setOpenComments }) {
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${
-          params.userId
-        }/homePage/deleteComment`,
+        `${import.meta.env.VITE_BASE_URL}/homePage/deleteComment`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(commentData),
-        }
+        },
       );
       if (response.status === 200) {
         window.location.reload();

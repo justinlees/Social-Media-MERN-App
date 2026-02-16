@@ -1,27 +1,28 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
-export default function SelfPostOptions({ postId, setSelfUser }) {
+export default function SelfPostOptions({ postId, setSelfUser, setUserPosts }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const params = useParams();
+  const navigate = useNavigate();
   const handleDelete = async () => {
     const deleteData = {
       _id: postId,
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${
-          params.userId
-        }/homePage/userProfile/postDeletion`,
+        `${import.meta.env.VITE_BASE_URL}/homePage/userProfile/postDeletion`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(deleteData),
-        }
+        },
       );
 
       if (response.status === 200) {
-        window.location.reload();
+        setUserPosts((prev) => prev.filter((post) => post._id !== postId));
+        navigate(".");
       } else if (response.status === 404) {
         alert("Unable to Delete the Post");
       }

@@ -18,13 +18,14 @@ export default function SignIn() {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify(formData),
-        }
+        },
       );
       setLoading(false);
       if (response.status === 200) {
         const data = await response.json();
-        window.location = `/${data.user._id}/homePage`;
+        window.location = `/homePage`;
       } else if (response.status === 404) {
         alert("UserName or Password is wrong");
       } else {

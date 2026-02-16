@@ -9,7 +9,7 @@ const FollowRequest = require("../models/followRequest.model.js");
 
 // GET USER DETAILS
 const getUserDetails = async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.userId;
   try {
     const user = await User.findOne({ _id: userId }).select("-password");
 
@@ -44,7 +44,8 @@ const searchAccounts = async (req, res) => {
 
 //GET SEARCH ACCOUNT POSTS
 const searchAccountUser = async (req, res) => {
-  const { userId, searchUserId } = req.params;
+  const { searchUserId } = req.params;
+  const userId = req.userId;
   try {
     const searchUserPosts = await Post.find({ userId: searchUserId });
     const searchUser = await User.findOne({ _id: searchUserId }).select(
@@ -70,7 +71,7 @@ const searchAccountUser = async (req, res) => {
 
 // GET USER POSTS
 const getUserPosts = async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.userId;
   try {
     const posts = await Post.find({ userId });
     return res.status(200).json({ posts });
@@ -82,7 +83,7 @@ const getUserPosts = async (req, res) => {
 
 //GET USER NOTIFICATIONS
 const getNotifications = async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.userId;
   try {
     const getRequests = await FollowRequest.find({ followingId: userId });
     return res.status(200).json({ getRequests });
@@ -94,7 +95,7 @@ const getNotifications = async (req, res) => {
 
 // CREATING USER'S POST
 const userPostCreation = async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.userId;
   const { postCaption, userName } = req.body;
   const postImage = req.file.path;
   try {
@@ -115,7 +116,7 @@ const userPostCreation = async (req, res) => {
       userName,
     });
     if (createPost) {
-      return res.status(201).json({ message: "postCreated" });
+      return res.status(201).json({ createPost });
     }
     return res.status(404).json({ message: "Error in post creation" });
   } catch (error) {
@@ -286,9 +287,10 @@ const commentPost = async (req, res) => {
 const editUserDetails = async (req, res) => {
   const { fullName, dob, userName, mobile, email, accountType, bioData } =
     req.body;
+  const userId = req.userId;
   try {
     const editUser = await User.findOneAndUpdate(
-      { userName },
+      { _id: userId },
       { fullName, dob, mobile, email, accountType, bioData },
     );
     if (editUser) return res.status(200);
@@ -301,7 +303,8 @@ const editUserDetails = async (req, res) => {
 
 //GET MESSAGES
 const getMessages = async (req, res) => {
-  const { userId, searchUserId } = req.params;
+  const { searchUserId } = req.params;
+  const userId = req.userId;
   try {
     const msg = await Message.find({
       senderId: { $in: [userId, searchUserId] },
@@ -316,7 +319,8 @@ const getMessages = async (req, res) => {
 
 //STORE MESSAGES
 const storeMessages = async (req, res) => {
-  const { userId, searchUserId } = req.params;
+  const { searchUserId } = req.params;
+  const userId = req.userId;
   const { file, text } = req.body;
   try {
     const createMsg = await Message.create({
@@ -368,9 +372,9 @@ const deleteComment = async (req, res) => {
 // DELETE USER ACCOUNT
 
 const userAccountDeletion = async (req, res) => {
-  const { _id } = req.body;
+  const userId = req.userId;
   try {
-    const deleteUser = await User.findOneAndDelete({ _id });
+    const deleteUser = await User.findOneAndDelete({ _id: userId });
     if (deleteUser) {
       const deleteUserPosts = await Post.findOneAndDelete({ userId: _id });
       if (deleteUserPosts) {

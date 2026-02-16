@@ -1,38 +1,38 @@
 import { useState } from "react";
-import { Link, useParams, useOutletContext } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import SelfPostOptions from "./SelfPostOptions";
 import OthersPostOptions from "./OthersPostOptions";
 import PostComments from "./PostComments";
 
-export default function Post({ posts, user }) {
+export default function Post({ posts, user, setUserPosts }) {
   const [selfUser, setSelfUser] = useState(false);
   const [getPostId, setGetPostId] = useState();
   const [otherUser, setOtherUser] = useState(false);
   const [openComments, setOpenComments] = useState(false);
-  const [isValidLike, setIsValidLike] = useState(false);
+
+  const navigate = useNavigate();
   const params = useParams();
 
   const handleSubmit = async (postId) => {
     const formData = {
       _id: postId,
-      userId: params.userId,
+      userId: user._id,
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${
-          params.userId
-        }/homePage/userProfile/likePost`,
+        `${import.meta.env.VITE_BASE_URL}/homePage/userProfile/likePost`,
         {
           method: "POST",
           headers: {
             "Content-type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify(formData),
         },
       );
 
       if (response.status === 200) {
-        window.location.reload();
+        navigate(".");
       }
     } catch (error) {
       console.error("Server Error", error);
@@ -51,9 +51,9 @@ export default function Post({ posts, user }) {
               <p>
                 <Link
                   to={
-                    post?.userId !== params.userId
-                      ? `/${params.userId}/homePage/${post?.userId}`
-                      : `/${params.userId}/homePage/userProfile`
+                    post?.userId !== user._id
+                      ? `/homePage/${post?.userId}`
+                      : `/homePage/userProfile`
                   }
                 >
                   {post?.userName}
@@ -62,18 +62,25 @@ export default function Post({ posts, user }) {
             </div>
             <span
               onClick={() => {
-                if (post?.userId === params.userId) {
+                if (post?.userId === user._id) {
                   setGetPostId(post?._id);
                   setSelfUser(true);
-                } else setOtherUser(true);
+                } else {
+                  setGetPostId(post?._id);
+                  setOtherUser(true);
+                }
               }}
             >
               ::
             </span>
             {selfUser && post?._id === getPostId && (
-              <SelfPostOptions postId={post?._id} setSelfUser={setSelfUser} />
+              <SelfPostOptions
+                postId={post?._id}
+                setUserPosts={setUserPosts}
+                setSelfUser={setSelfUser}
+              />
             )}
-            {otherUser && (
+            {otherUser && post?._id === getPostId && (
               <OthersPostOptions
                 postId={post?._id}
                 setOtherUser={setOtherUser}
@@ -93,12 +100,12 @@ export default function Post({ posts, user }) {
               <p>
                 <span
                   className={
-                    post?.likedBy.find((id) => params.userId === id)
+                    post?.likedBy.find((id) => user._id === id)
                       ? "material-symbols-outlined like"
                       : "material-symbols-outlined"
                   }
                   onClick={() => {
-                    if (post?.userId !== params.userId) {
+                    if (post?.userId !== user._id) {
                       handleSubmit(post?._id);
                     }
                   }}
@@ -127,9 +134,9 @@ export default function Post({ posts, user }) {
               <span>
                 <Link
                   to={
-                    post?.userId !== params.userId
-                      ? `/${params.userId}/homePage/${post?.userId}`
-                      : `/${params.userId}/homePage/userProfile`
+                    post?.userId !== user._d
+                      ? `/homePage/${post?.userId}`
+                      : `/homePage/userProfile`
                   }
                 >
                   {post?.userName}

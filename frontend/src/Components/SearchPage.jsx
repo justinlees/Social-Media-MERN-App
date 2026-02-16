@@ -9,19 +9,15 @@ export default function Search() {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        console.log("enter fetch");
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${
-            params.userId
-          }/homePage/search?account=${searchTerm}`,
+          `${import.meta.env.VITE_BASE_URL}/homePage/search?account=${searchTerm}`,
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
-          }
+            credentials: "include",
+          },
         );
-        console.log("Finish fetch");
         const data = await response.json();
-        console.log("get data");
         if (data.accounts) {
           setAccounts(data.accounts);
         }
@@ -30,7 +26,7 @@ export default function Search() {
       }
     };
     fetchAccounts();
-  }, [searchTerm, params.userId]);
+  }, [searchTerm]);
   return (
     <div className="searchPage w-full h-full flex">
       <div>
@@ -50,8 +46,8 @@ export default function Search() {
                 <Link
                   to={
                     account._id !== params.userId
-                      ? `/${params.userId}/homePage/${account._id}`
-                      : `/${params.userId}/homePage/userProfile`
+                      ? `/homePage/${account._id}`
+                      : `/homePage/userProfile`
                   }
                 >
                   {account?.userName}

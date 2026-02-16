@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
-export default function PostCreation({ setOpenPost, postUserName }) {
+export default function PostCreation({
+  setOpenPost,
+  postUserName,
+  setUserPosts,
+}) {
   const params = useParams();
   const [docFile, setDocFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -15,16 +21,19 @@ export default function PostCreation({ setOpenPost, postUserName }) {
     formData.append("postCaption", e.target.postCaption.value);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${
-          params.userId
-        }/homePage/userProfile/postCreation`,
+        `${import.meta.env.VITE_BASE_URL}/homePage/userProfile/postCreation`,
         {
           method: "POST",
+          credentials: "include",
           body: formData,
         },
       );
       if (response.status === 201) {
-        window.location.reload();
+        const data = await response.json();
+        setUserPosts((prev) => [...prev, data.createPost]);
+        setOpenPost(false);
+        setLoading(false);
+        navigate(".");
       }
     } catch (error) {
       console.log("Error Occured", error);

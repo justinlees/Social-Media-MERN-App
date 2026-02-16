@@ -8,14 +8,13 @@ export default function AccountDeletion() {
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${
-          params.userId
-        }/homePage/userSettings/accountDeletion`,
+        `${import.meta.env.VITE_BASE_URL}/homePage/userSettings/accountDeletion`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(userData),
-        }
+        },
       );
 
       if (response.status === 200) {

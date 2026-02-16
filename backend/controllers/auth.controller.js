@@ -1,5 +1,6 @@
 const User = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const signUp = async (req, res) => {
   const { fullName, userName, dob, email, mobile } = req.body;
@@ -20,9 +21,19 @@ const signUp = async (req, res) => {
       });
 
       const user = await User.findOne({ userName }).select("-password");
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      });
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict",
+        maxAge: 24 * 60 * 60 * 1000,
+      });
       return res.status(201).json({ user });
     }
-    return res.status(404).json({ message: "User Already Exist" });
+    return res.status(409).json({ message: "User Already Exist" });
   } catch (error) {
     return res.status(500).json({ message: "Server Error" });
   }
@@ -38,6 +49,15 @@ const signIn = async (req, res) => {
     const checkPassword = await bcrypt.compare(password, findUser.password);
     if (checkPassword) {
       const user = await User.findOne({ userName }).select("-password");
+      const token = jwt.sign({ id: findUser._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      });
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict",
+        maxAge: 24 * 60 * 60 * 1000,
+      });
       return res.status(200).json({ user });
     } else {
       return res.status(404).json({ message: "Password wrong" });

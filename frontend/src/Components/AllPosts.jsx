@@ -13,7 +13,12 @@ export default function AllPosts({ posts }) {
       const fetchData = async () => {
         setLoading(true);
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${params.userId}/homePage/allPosts`
+          `${import.meta.env.VITE_BASE_URL}/homePage/allPosts`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          },
         );
 
         if (response.status === 200) {
@@ -26,7 +31,7 @@ export default function AllPosts({ posts }) {
     } catch (error) {
       console.log("Server Error", error);
     }
-  }, [params.userId]);
+  }, []);
 
   if (loading)
     return (

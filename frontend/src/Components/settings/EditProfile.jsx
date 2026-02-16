@@ -19,14 +19,13 @@ export default function EditProfile() {
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${
-          params.userId
-        }/homePage/userSettings/editProfile`,
+        `${import.meta.env.VITE_BASE_URL}/homePage/userSettings/editProfile`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(formData),
-        }
+        },
       );
       if (response.status === 200) {
         window.location.reload();

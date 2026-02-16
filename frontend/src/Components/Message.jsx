@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useOutletContext, useParams } from "react-router-dom";
+import {
+  Link,
+  useOutletContext,
+  useParams,
+  useNavigate,
+} from "react-router-dom";
 import socket from "../lib/SocketInstance";
 
 export default function Message() {
@@ -7,6 +12,7 @@ export default function Message() {
   const [message, setMessage] = useState([]);
   const [follow, setFollow] = useState();
   const { userId } = useParams();
+  const navigate = useNavigate();
   const chatId =
     userId > accountInfo._id
       ? `${userId}-${accountInfo._id}`
@@ -28,10 +34,11 @@ export default function Message() {
     const fetchMessages = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${userId}/homePage/${accountInfo._id}/message`,
+          `${import.meta.env.VITE_BASE_URL}/homePage/${accountInfo._id}/message`,
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
           },
         );
         if (response.status === 200) {
@@ -45,7 +52,7 @@ export default function Message() {
       }
     };
     fetchMessages();
-  }, [userId, accountInfo._id]);
+  }, [accountInfo._id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,10 +62,11 @@ export default function Message() {
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${userId}/homePage/${accountInfo._id}/message`,
+        `${import.meta.env.VITE_BASE_URL}/homePage/${accountInfo._id}/message`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(formData),
         },
       );
@@ -74,7 +82,7 @@ export default function Message() {
   };
 
   const handleNavigate = () => {
-    window.location = "..";
+    navigate("..");
   };
 
   const allowed =

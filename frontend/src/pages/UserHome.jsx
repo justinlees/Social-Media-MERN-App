@@ -9,14 +9,19 @@ export default function UserHome() {
 
   useEffect(() => {
     socket.emit("notifyJoin", params.userId);
-  }, [params.userId]);
+  }, []);
 
   useEffect(() => {
     try {
       const fetchData = async () => {
         setLoading(true);
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/${params.userId}/homePage`,
+          `${import.meta.env.VITE_BASE_URL}/homePage`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          },
         );
         const data = await response.json();
         if (response.status === 200) {
@@ -30,7 +35,7 @@ export default function UserHome() {
     } catch (error) {
       consol.error("Error Occured", error);
     }
-  }, [params.userId]);
+  }, []);
 
   if (loading)
     return (

@@ -5,16 +5,30 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./lib/db.js");
+const cookieParser = require("cookie-parser");
 
 const userRouter = require("./routes/user.routes.js");
 const authRouter = require("./routes/auth.routes.js");
 
 const app = express();
 dotenv.config(app);
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://10.0.70.119:5173",
+      "http://10.0.70.86:5173",
+      "http://10.0.70.108:5173",
+      "http://10.0.70.82:5173",
+      "http://10.0.97.111:5173",
+    ],
+    credentials: true,
+  }),
+);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -28,6 +42,7 @@ const io = new Server(httpServer, {
       "http://10.0.97.111:5173/",
     ],
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
@@ -43,7 +58,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("notifyJoin", (userId) => {
-    console.log(userId);
     socket.join(userId);
   });
   socket.on("requestFollow", (followData) => {

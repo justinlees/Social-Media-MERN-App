@@ -1,27 +1,27 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 export default function OthersPostOptions({ postId, setOtherUser }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const params = useParams();
+  const navigate = useNavigate();
   const handleSave = async () => {
     const saveData = {
       _id: postId,
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${
-          params.userId
-        }/homePage/userProfile/savePost`,
+        `${import.meta.env.VITE_BASE_URL}/homePage/userProfile/savePost`,
         {
           method: "Patch",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(saveData),
-        }
+        },
       );
 
       if (response.status === 200) {
-        window.location.reload();
+        navigate(".");
       } else if (response.status === 404) {
         alert("Unable to Delete the Post");
       }
