@@ -32,7 +32,7 @@ export default function Post({ posts, user, setUserPosts }) {
       );
 
       if (response.status === 200) {
-        navigate(".");
+        window.location.reload();
       }
     } catch (error) {
       console.error("Server Error", error);

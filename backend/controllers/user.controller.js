@@ -6,6 +6,7 @@ const Followers = require("../models/followers.model.js");
 const Message = require("../models/message.model.js");
 const cloudinary = require("../lib/cloudinarySetup.js");
 const FollowRequest = require("../models/followRequest.model.js");
+const Connection = require("../models/connection.model.js");
 
 // GET USER DETAILS
 const getUserDetails = async (req, res) => {
@@ -158,69 +159,118 @@ const incrementPostLike = async (req, res) => {
 };
 
 //FOLLOWING A USER
-const followUser = async (req, res) => {
-  const { userId, userName, followingId, followingUsername } = req.body;
-  try {
-    const getUserName = await User.findOne({ _id: userId });
+// const followUser = async (req, res) => {
+//   const { userId, userName, followingId, followingUsername } = req.body;
+//   try {
+//     const getUserName = await User.findOne({ _id: userId });
 
-    const followingExist = await Following.findOne({ userId, followingId });
-    if (!followingExist) {
-      const followUser = await Following.create({
-        userId,
-        userName,
-        followingId,
-        followingUsername,
+//     const followingExist = await Following.findOne({ userId, followingId });
+//     if (!followingExist) {
+//       const followUser = await Following.create({
+//         userId,
+//         userName,
+//         followingId,
+//         followingUsername,
+//       });
+//       const followedUser = await Followers.create({
+//         userId: followingId,
+//         userName: followingUsername,
+//         followerId: userId,
+//         followerUsername: getUserName.userName,
+//       });
+//       const incrementFollowingUser = await User.findOneAndUpdate(
+//         { _id: userId },
+//         { $inc: { following: 1 } },
+//       );
+//       const incrementFollowedUser = await User.findOneAndUpdate(
+//         { _id: followingId },
+//         { $inc: { followers: 1 } },
+//       );
+//       const removeFollowRequest = await FollowRequest.deleteOne({
+//         userId,
+//         userName,
+//         followingId,
+//         followingUsername,
+//       });
+//       if (removeFollowRequest) {
+//         return res.status(200).json({ message: "following success" });
+//       }
+//     } else {
+//       const followingUser = await Following.deleteOne({
+//         userId,
+//         userName,
+//         followingId,
+//         followingUsername,
+//       });
+//       const followedUser = await Followers.deleteOne({
+//         userId: followingId,
+//         userName: followingUsername,
+//         followerId: userId,
+//         followerUsername: getUserName.userName,
+//       });
+//       const decrementFollowingUser = await User.findOneAndUpdate(
+//         { _id: userId },
+//         { $inc: { following: -1 } },
+//       );
+//       const decrementFollowedUser = await User.findOneAndUpdate(
+//         { _id: followingId },
+//         { $inc: { followers: -1 } },
+//       );
+//       if (decrementFollowedUser) {
+//         return res.status(200).json({ message: "decrement success" });
+//       }
+//     }
+//   } catch (error) {
+//     return res.status(500).json({ message: "Server Error", error });
+//   }
+// };
+
+//FOLLOW USER
+
+const followUser = async (req, res) => {
+  const currentUserId = req.userId;
+  const { targetUserId } = req.params;
+
+  try {
+    const connectionExist = await Connection.findOne({
+      followerId: currentUserId,
+      followingId: targetUserId,
+    });
+    const checkAccountPrivacy = await User.findById(targetUserId);
+    const userPrivacy =
+      checkAccountPrivacy.accountType === "public" ? "accepted" : "pending";
+    if (!connectionExist) {
+      await Connection.create({
+        followerId: currentUserId,
+        followingId: targetUserId,
+        connectionStatus: userPrivacy,
       });
-      const followedUser = await Followers.create({
-        userId: followingId,
-        userName: followingUsername,
-        followerId: userId,
-        followerUsername: getUserName.userName,
+
+      const userFollowers = await Connection.find({
+        followingId: targetUserId,
+      }).populate("followerId", "userName profileImage");
+
+      const userFollowings = await Connection.find({
+        followerId: targetUserId,
+      }).populate("followingId", "userName profileImage");
+
+      return res.status(201).json({
+        userFollowers,
+        userFollowings,
+        message: "Connection Successful",
       });
-      const incrementFollowingUser = await User.findOneAndUpdate(
-        { _id: userId },
-        { $inc: { following: 1 } },
-      );
-      const incrementFollowedUser = await User.findOneAndUpdate(
-        { _id: followingId },
-        { $inc: { followers: 1 } },
-      );
-      const removeFollowRequest = await FollowRequest.deleteOne({
-        userId,
-        userName,
-        followingId,
-        followingUsername,
-      });
-      if (removeFollowRequest) {
-        return res.status(200).json({ message: "following success" });
-      }
     } else {
-      const followingUser = await Following.deleteOne({
-        userId,
-        userName,
-        followingId,
-        followingUsername,
+      await Connection.deleteOne({
+        followerId: currentUserId,
+        followingId: targetUserId,
       });
-      const followedUser = await Followers.deleteOne({
-        userId: followingId,
-        userName: followingUsername,
-        followerId: userId,
-        followerUsername: getUserName.userName,
-      });
-      const decrementFollowingUser = await User.findOneAndUpdate(
-        { _id: userId },
-        { $inc: { following: -1 } },
-      );
-      const decrementFollowedUser = await User.findOneAndUpdate(
-        { _id: followingId },
-        { $inc: { followers: -1 } },
-      );
-      if (decrementFollowedUser) {
-        return res.status(200).json({ message: "decrement success" });
-      }
+      return res
+        .status(200)
+        .json({ message: "Connection Deleted Successfully" });
     }
   } catch (error) {
-    return res.status(500).json({ message: "Server Error", error });
+    console.error(error);
+    return res.status(500).json({ message: "Server Error" });
   }
 };
 

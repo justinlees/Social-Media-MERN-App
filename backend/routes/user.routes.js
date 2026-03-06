@@ -35,7 +35,7 @@ router.get(
   getNotifications,
 );
 
-router.post("/following/:searchUserId", protectAuth, followUser);
+router.post("/following/:targetUserId", protectAuth, followUser);
 router.post("/followRequest/:searchUserId", protectAuth, followRequest);
 router.post(
   "/homePage/userProfile/postCreation",

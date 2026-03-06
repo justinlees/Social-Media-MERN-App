@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
-import { Link, Outlet, useParams, useOutletContext } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  useParams,
+  useOutletContext,
+  redirect,
+} from "react-router-dom";
 import Post from "./post/Post.jsx";
 import socket from "../lib/SocketInstance.jsx";
 
 export default function SearchAccountProfile() {
   const [accountInfo, setAccountInfo] = useState();
-  const { userId, searchUserId } = useParams();
+  const { searchUserId } = useParams();
   const [searchPosts, setSearchPosts] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [followings, setFollowings] = useState([]);
@@ -13,6 +19,8 @@ export default function SearchAccountProfile() {
   const [openFollowing, setOpenFollowing] = useState(false);
   const [followRequest, setFollowRequest] = useState([]);
   const user = useOutletContext();
+  const userId = user?._id;
+  console.log(userId);
   const followRequestId =
     userId > searchUserId
       ? `${userId}-${searchUserId}`
@@ -64,14 +72,7 @@ export default function SearchAccountProfile() {
     fetchSearchUser();
   }, [searchUserId]);
 
-  const handleFollow = async (followingUsername) => {
-    const followData = {
-      userId: userId,
-      userName: user.userName,
-      followingId: searchUserId,
-      followingUsername: followingUsername,
-    };
-
+  const handleFollow = async () => {
     try {
       if (accountInfo?.accountType === "public") {
         const response = await fetch(
@@ -80,12 +81,14 @@ export default function SearchAccountProfile() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify(followData),
           },
         );
         if (response.status === 200) {
           console.log("Request Done");
-          window.location.reload();
+          const data = await response.json();
+          // setFollowers(data.userFollowers);
+          // setFollowings(data.userFollowings);
+          redirect(".");
         }
       } else {
         const response = await fetch(
@@ -107,13 +110,7 @@ export default function SearchAccountProfile() {
     }
   };
 
-  const handleUnFollow = async (followingUsername) => {
-    const followData = {
-      userId: userId,
-      userName: user.userName,
-      followingId: searchUserId,
-      followingUsername: followingUsername,
-    };
+  const handleUnFollow = async () => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BASE_URL}/following/${searchUserId}`,
@@ -121,12 +118,11 @@ export default function SearchAccountProfile() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify(followData),
         },
       );
       if (response.status === 200) {
         console.log("Request Done");
-        window.location.reload();
+        redirect(".");
       }
     } catch (error) {
       console.log("Error in sending following request", error);
@@ -164,14 +160,14 @@ export default function SearchAccountProfile() {
                       ) ? (
                         <button
                           className="text-sm font-bold bg-red-400 text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer"
-                          onClick={() => handleUnFollow(accountInfo?.userName)}
+                          onClick={() => handleUnFollow()}
                         >
                           UnFollow
                         </button>
                       ) : (
                         <button
                           className="positiveBtn text-sm font-bold bg-black text-white w-[4rem] md:w-[6rem] lg:w-[8rem] rounded-sm cursor-pointer"
-                          onClick={() => handleFollow(accountInfo?.userName)}
+                          onClick={() => handleFollow()}
                         >
                           Follow
                         </button>
@@ -239,7 +235,7 @@ export default function SearchAccountProfile() {
 
           <div className="userPosts">
             {searchPosts.length ? (
-              <Post posts={searchPosts} user={accountInfo} />
+              <Post posts={searchPosts} user={user} />
             ) : (
               <h1>No posts yet</h1>
             )}
