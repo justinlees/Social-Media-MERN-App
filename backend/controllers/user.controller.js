@@ -52,11 +52,11 @@ const searchAccountUser = async (req, res) => {
     const searchUser = await User.findOne({ _id: searchUserId }).select(
       "-password",
     );
-    const searchUserFollowers = await Followers.find({
-      userId: searchUserId,
+    const searchUserFollowers = await Connection.find({
+      followingId: searchUserId,
     });
-    const searchUserFollowings = await Following.find({
-      userId: searchUserId,
+    const searchUserFollowings = await Connection.find({
+      followerId: searchUserId,
     });
     if (searchUserPosts.length || searchUser)
       return res.status(200).json({
@@ -158,75 +158,7 @@ const incrementPostLike = async (req, res) => {
   }
 };
 
-//FOLLOWING A USER
-// const followUser = async (req, res) => {
-//   const { userId, userName, followingId, followingUsername } = req.body;
-//   try {
-//     const getUserName = await User.findOne({ _id: userId });
-
-//     const followingExist = await Following.findOne({ userId, followingId });
-//     if (!followingExist) {
-//       const followUser = await Following.create({
-//         userId,
-//         userName,
-//         followingId,
-//         followingUsername,
-//       });
-//       const followedUser = await Followers.create({
-//         userId: followingId,
-//         userName: followingUsername,
-//         followerId: userId,
-//         followerUsername: getUserName.userName,
-//       });
-//       const incrementFollowingUser = await User.findOneAndUpdate(
-//         { _id: userId },
-//         { $inc: { following: 1 } },
-//       );
-//       const incrementFollowedUser = await User.findOneAndUpdate(
-//         { _id: followingId },
-//         { $inc: { followers: 1 } },
-//       );
-//       const removeFollowRequest = await FollowRequest.deleteOne({
-//         userId,
-//         userName,
-//         followingId,
-//         followingUsername,
-//       });
-//       if (removeFollowRequest) {
-//         return res.status(200).json({ message: "following success" });
-//       }
-//     } else {
-//       const followingUser = await Following.deleteOne({
-//         userId,
-//         userName,
-//         followingId,
-//         followingUsername,
-//       });
-//       const followedUser = await Followers.deleteOne({
-//         userId: followingId,
-//         userName: followingUsername,
-//         followerId: userId,
-//         followerUsername: getUserName.userName,
-//       });
-//       const decrementFollowingUser = await User.findOneAndUpdate(
-//         { _id: userId },
-//         { $inc: { following: -1 } },
-//       );
-//       const decrementFollowedUser = await User.findOneAndUpdate(
-//         { _id: followingId },
-//         { $inc: { followers: -1 } },
-//       );
-//       if (decrementFollowedUser) {
-//         return res.status(200).json({ message: "decrement success" });
-//       }
-//     }
-//   } catch (error) {
-//     return res.status(500).json({ message: "Server Error", error });
-//   }
-// };
-
 //FOLLOW USER
-
 const followUser = async (req, res) => {
   const currentUserId = req.userId;
   const { targetUserId } = req.params;
@@ -264,9 +196,18 @@ const followUser = async (req, res) => {
         followerId: currentUserId,
         followingId: targetUserId,
       });
-      return res
-        .status(200)
-        .json({ message: "Connection Deleted Successfully" });
+      const userFollowers = await Connection.find({
+        followingId: targetUserId,
+      }).populate("followerId", "userName profileImage");
+
+      const userFollowings = await Connection.find({
+        followerId: targetUserId,
+      }).populate("followingId", "userName profileImage");
+      return res.status(200).json({
+        userFollowers,
+        userFollowings,
+        message: "Connection Deleted Successfully",
+      });
     }
   } catch (error) {
     console.error(error);
