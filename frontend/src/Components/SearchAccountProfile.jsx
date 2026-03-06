@@ -86,8 +86,8 @@ export default function SearchAccountProfile() {
         if (response.status === 200) {
           console.log("Request Done");
           const data = await response.json();
-          // setFollowers(data.userFollowers);
-          // setFollowings(data.userFollowings);
+          setFollowers(data.userFollowers);
+          setFollowings(data.userFollowings);
           redirect(".");
         }
       } else {
@@ -155,7 +155,7 @@ export default function SearchAccountProfile() {
                     <div>
                       {followers.find(
                         (follower) =>
-                          follower.userId === searchUserId &&
+                          follower.followingId === searchUserId &&
                           follower.followerId === userId,
                       ) ? (
                         <button
