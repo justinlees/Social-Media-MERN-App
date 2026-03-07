@@ -11,8 +11,9 @@ const userSchema = new mongoose.Schema({
   accountType: { type: String, required: true, default: "public" },
   isStar: { type: Boolean, default: false },
   profileImage: { type: String, default: "" },
-  following: { type: Number, default: 0 },
-  followers: { type: Number, default: 0 },
+  followersCount: { type: Number, default: 0 },
+  followingCount: { type: Number, default: 0 },
+  postsCount: { type: Number, default: 0 },
 });
 
 const User = mongoose.model("user", userSchema);

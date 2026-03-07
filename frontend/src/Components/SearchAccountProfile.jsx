@@ -17,7 +17,10 @@ export default function SearchAccountProfile() {
   const [followings, setFollowings] = useState([]);
   const [openFollowers, setOpenFollowers] = useState(false);
   const [openFollowing, setOpenFollowing] = useState(false);
-  const [followRequest, setFollowRequest] = useState([]);
+
+  const [followersCount, setFollowersCount] = useState();
+  const [followingCount, setFollowingCount] = useState();
+
   const user = useOutletContext();
   const userId = user?._id;
   console.log(userId);
@@ -62,8 +65,8 @@ export default function SearchAccountProfile() {
         if (data.searchUserPosts) {
           setSearchPosts(data.searchUserPosts);
           setAccountInfo(data.searchUser);
-          setFollowers(data.searchUserFollowers);
-          setFollowings(data.searchUserFollowings);
+          setFollowersCount(data.targetUserFollowers);
+          setFollowingCount(data.targetUserFollowings);
         }
       } catch (error) {
         console.log("Server Error", error);
@@ -83,11 +86,12 @@ export default function SearchAccountProfile() {
             credentials: "include",
           },
         );
-        if (response.status === 200) {
+        if (response.status === 201) {
           console.log("Request Done");
           const data = await response.json();
-          setFollowers(data.userFollowers);
-          setFollowings(data.userFollowings);
+          setFollowersCount(data.userFollowers);
+          setFollowingCount(data.userFollowings);
+          setFollowers((prev) => [...prev, data.newConnection]);
           redirect(".");
         }
       } else {
@@ -212,7 +216,7 @@ export default function SearchAccountProfile() {
                     }}
                   >
                     <span className="font-bold text-md md:text-xl">
-                      {followers.length}
+                      {followersCount}
                     </span>
                     Followers
                   </li>
@@ -224,7 +228,7 @@ export default function SearchAccountProfile() {
                     }}
                   >
                     <span className="font-bold text-md md:text-xl">
-                      {followings.length}
+                      {followingCount}
                     </span>
                     Following
                   </li>

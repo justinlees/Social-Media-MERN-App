@@ -46,24 +46,34 @@ const searchAccounts = async (req, res) => {
 //GET SEARCH ACCOUNT POSTS
 const searchAccountUser = async (req, res) => {
   const { searchUserId } = req.params;
+  const targetUserId = req.params.searchUserId;
   const userId = req.userId;
   try {
     const searchUserPosts = await Post.find({ userId: searchUserId });
     const searchUser = await User.findOne({ _id: searchUserId }).select(
       "-password",
     );
-    const searchUserFollowers = await Connection.find({
-      followingId: searchUserId,
-    });
-    const searchUserFollowings = await Connection.find({
-      followerId: searchUserId,
-    });
+    // const searchUserFollowers = await Connection.find({
+    //   followingId: searchUserId,
+    // });
+    // const searchUserFollowings = await Connection.find({
+    //   followerId: searchUserId,
+    // });
+
+    const targetUserFollowers = await Connection.find({
+      followingId: targetUserId,
+    }).countDocuments();
+
+    const targetUserFollowings = await Connection.find({
+      followerId: targetUserId,
+    }).countDocuments();
+
     if (searchUserPosts.length || searchUser)
       return res.status(200).json({
         searchUserPosts,
         searchUser,
-        searchUserFollowers,
-        searchUserFollowings,
+        targetUserFollowers,
+        targetUserFollowings,
       });
   } catch (error) {
     return res.status(500).json({ message: "Server Error" });
@@ -172,7 +182,7 @@ const followUser = async (req, res) => {
     const userPrivacy =
       checkAccountPrivacy.accountType === "public" ? "accepted" : "pending";
     if (!connectionExist) {
-      await Connection.create({
+      const newConnection = await Connection.create({
         followerId: currentUserId,
         followingId: targetUserId,
         connectionStatus: userPrivacy,
@@ -180,15 +190,28 @@ const followUser = async (req, res) => {
 
       const userFollowers = await Connection.find({
         followingId: targetUserId,
-      }).populate("followerId", "userName profileImage");
+      }).countDocuments();
 
       const userFollowings = await Connection.find({
         followerId: targetUserId,
-      }).populate("followingId", "userName profileImage");
+      }).countDocuments();
+
+      // await User.findByIdAndUpdate(
+      //   { currentUserId },
+      //   { $inc: { followingCount: 1 } },
+      // );
+
+      // const targetUser = await User.findByIdAndUpdate(
+      //   { targetUserId },
+      //   { $inc: { followersCount: 1 } },
+      // );
 
       return res.status(201).json({
+        newConnection,
         userFollowers,
         userFollowings,
+        // targetFollowerCount: targetUser.followersCount,
+        // targetFollowingCount: targetUser.followingCount,
         message: "Connection Successful",
       });
     } else {
@@ -196,19 +219,60 @@ const followUser = async (req, res) => {
         followerId: currentUserId,
         followingId: targetUserId,
       });
-      const userFollowers = await Connection.find({
-        followingId: targetUserId,
-      }).populate("followerId", "userName profileImage");
 
-      const userFollowings = await Connection.find({
-        followerId: targetUserId,
-      }).populate("followingId", "userName profileImage");
+      await User.findByIdAndUpdate(
+        { currentUserId },
+        { $inc: { followingCount: -1 } },
+      );
+
+      const targetUser = await User.findByIdAndUpdate(
+        { targetUserId },
+        { $inc: { followersCount: -1 } },
+      );
+
       return res.status(200).json({
-        userFollowers,
-        userFollowings,
+        targetFollowerCount: targetUser.followersCount,
+        targetFollowingCount: targetUser.followingCount,
         message: "Connection Deleted Successfully",
       });
     }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+//FETCH FOLLOWERS & FOLLOWINGS
+const getConnections = async (req, res) => {
+  const currentUserId = req.userId;
+  const { targetUserId } = req.params;
+  if (!targetUserId) {
+    const userFollowers = await Connection.find({
+      followingId: currentUserId,
+    }).populate("followerId", "userName profileImage");
+
+    const userFollowings = await Connection.find({
+      followerId: currentUserId,
+    }).populate("followingId", "userName profileImage");
+    return res.status(200).json({
+      userFollowers,
+      userFollowings,
+      message: "Fetch successful",
+    });
+  }
+  try {
+    const userFollowers = await Connection.find({
+      followingId: targetUserId,
+    }).populate("followerId", "userName profileImage");
+
+    const userFollowings = await Connection.find({
+      followerId: targetUserId,
+    }).populate("followingId", "userName profileImage");
+    return res.status(200).json({
+      userFollowers,
+      userFollowings,
+      message: "Fetch successful",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server Error" });
